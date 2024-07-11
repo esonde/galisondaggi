@@ -2,32 +2,24 @@
 fetch('analysis_results.json')
     .then(response => response.json())
     .then(data => {
-        console.log('Dati ricevuti:', data);
         updateDashboard(data);
         createTimeAnalysisCharts(data);
         createPollsterAnalysisCharts(data);
         createRankings(data);
         setupImageZoom();
     })
-    .catch(error => {
-        console.error('Errore nel caricamento dei dati:', error);
-        document.body.innerHTML += `<p>Errore nel caricamento dei dati: ${error.message}</p>`;
-    });
+    .catch(error => console.error('Errore nel caricamento dei dati:', error));
 
 function updateDashboard(data) {
-    if (data.basic_stats) {
-        document.getElementById('total-polls').textContent = (data.basic_stats.total_polls || 0).toLocaleString();
-        document.getElementById('total-votes').textContent = (data.basic_stats.total_votes || 0).toLocaleString();
-        document.getElementById('avg-votes-per-poll').textContent = (data.basic_stats.avg_votes_per_poll || 0).toFixed(2);
+    document.getElementById('total-polls').textContent = data.basic_stats.total_polls.toLocaleString();
+    document.getElementById('total-votes').textContent = data.basic_stats.total_votes.toLocaleString();
+    document.getElementById('avg-votes-per-poll').textContent = data.basic_stats.avg_votes_per_poll.toFixed(2);
 
-        updatePollBox('most-voted-poll', data.basic_stats.most_voted_poll);
-        updatePollBox('least-voted-poll', data.basic_stats.least_voted_poll);
-    }
+    updatePollBox('most-voted-poll', data.basic_stats.most_voted_poll);
+    updatePollBox('least-voted-poll', data.basic_stats.least_voted_poll);
 }
 
 function updatePollBox(elementId, pollData) {
-    if (!pollData) return;
-
     const pollBox = document.getElementById(elementId);
     const date = new Date(pollData.DateTime);
     const options = Object.entries(pollData.Options);
@@ -54,159 +46,127 @@ function updatePollBox(elementId, pollData) {
         <p>Voti totali: ${totalVotes}</p>
     `;
 }
-
 function createTimeAnalysisCharts(data) {
-    if (data.weekly_stats && data.daily_stats && data.hourly_stats) {
-        createChart('weekly-chart', 'Analisi Settimanale', data.weekly_stats, 'week');
-        createChart('daily-chart', 'Analisi Giornaliera', data.daily_stats, 'day');
-        createChart('hourly-chart', 'Analisi Oraria', data.hourly_stats, 'hour');
-    } else {
-        console.error('Dati mancanti per l\'analisi temporale');
-    }
+    createChart('weekly-chart', 'Analisi Settimanale', data.weekly_stats, true);
+    createChart('daily-chart', 'Analisi Giornaliera', data.daily_stats, false);
 }
 
-function createChart(canvasId, title, data, timeUnit) {
+function createChart(canvasId, title, data, isWeekly) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) {
         console.error(`Canvas con id ${canvasId} non trovato`);
         return;
     }
     const ctx = canvas.getContext('2d');
-    const chartData = prepareChartData(data, timeUnit);
+    const chartData = prepareChartData(data, isWeekly);
     
-    if (!chartData) {
-        console.error(`Dati non validi per il grafico ${title}`);
-        return;
-    }
-
+    // Calcola il minimo e il massimo per l'asse Y della media voti
     const minAvgVotes = Math.min(...chartData.avgVotes.filter(v => v !== null));
     const maxAvgVotes = Math.max(...chartData.avgVotes.filter(v => v !== null));
     const avgVotesRange = maxAvgVotes - minAvgVotes;
     const avgVotesMin = Math.max(0, minAvgVotes - avgVotesRange * 0.1);
     const avgVotesMax = maxAvgVotes + avgVotesRange * 0.1;
 
-    try {
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: chartData.labels,
-                datasets: [{
-                    label: 'Numero di sondaggi',
-                    data: chartData.numPolls,
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    yAxisID: 'y-axis-1'
-                }, {
-                    label: 'Media voti per sondaggio',
-                    data: chartData.avgVotes,
-                    type: 'line',
-                    fill: false,
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    tension: 0.1,
-                    yAxisID: 'y-axis-2'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: title,
-                        font: { size: 18 }
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    legend: {
-                        position: 'top',
-                    }
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Numero di sondaggi',
+                data: chartData.numPolls,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                yAxisID: 'y-axis-1'
+            }, {
+                label: 'Media voti per sondaggio',
+                data: chartData.avgVotes,
+                type: 'line',
+                fill: false,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                tension: 0.1,
+                yAxisID: 'y-axis-2'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: title,
+                    font: { size: 18 }
                 },
-                scales: {
-                    x: {
-                        type: timeUnit !== 'hour' ? 'time' : 'category',
-                        time: timeUnit !== 'hour' ? {
-                            unit: timeUnit,
-                            displayFormats: { 
-                                week: 'MMM yyyy',
-                                day: 'dd MMM'
-                            }
-                        } : undefined,
-                        ticks: {
-                            autoSkip: true,
-                            maxTicksLimit: 12,
-                            callback: function(value, index, values) {
-                                if (timeUnit === 'week') {
-                                    const date = new Date(value);
-                                    return date.getDate() <= 7 ? date.toLocaleString('default', { month: 'short', year: 'numeric' }) : '';
-                                } else if (timeUnit === 'hour') {
-                                    return value + ':00';
-                                }
-                                return value;
-                            }
-                        }
-                    },
-                    'y-axis-1': {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        title: { display: true, text: 'Numero di sondaggi' },
-                        beginAtZero: true
-                    },
-                    'y-axis-2': {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        title: { display: true, text: 'Media voti per sondaggio' },
-                        grid: { drawOnChartArea: false },
-                        min: timeUnit !== 'hour' ? 0 : avgVotesMin,
-                        max: timeUnit !== 'hour' ? undefined : avgVotesMax
-                    }
-                },
-                interaction: {
-                    intersect: false,
+                tooltip: {
                     mode: 'index',
+                    intersect: false
+                },
+                legend: {
+                    position: 'top',
                 }
+            },
+            scales: {
+                x: {
+                    type: isWeekly ? 'time' : 'category',
+                    time: isWeekly ? {
+                        unit: 'week',
+                        displayFormats: { week: 'MMM yyyy' }
+                    } : undefined,
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 12,
+                        callback: function(value, index, values) {
+                            if (isWeekly) {
+                                const date = new Date(value);
+                                return date.getDate() <= 7 ? date.toLocaleString('default', { month: 'short', year: 'numeric' }) : '';
+                            }
+                            return value;
+                        }
+                    }
+                },
+                'y-axis-1': {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: { display: true, text: 'Numero di sondaggi' },
+                    beginAtZero: true
+                },
+                'y-axis-2': {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: { display: true, text: 'Media voti per sondaggio' },
+                    grid: { drawOnChartArea: false },
+                    min: isWeekly ? 0 : avgVotesMin,
+                    max: isWeekly ? undefined : avgVotesMax
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
             }
-        });
-    } catch (error) {
-        console.error(`Errore nella creazione del grafico ${title}:`, error);
-    }
-}
-
-function prepareChartData(data, timeUnit) {
-    if (!Array.isArray(data)) {
-        console.error('I dati forniti non sono un array');
-        return null;
-    }
-
-    const labels = data.map(item => {
-        if (timeUnit === 'hour') {
-            return new Date(item.DateTime).getHours();
-        } else if (timeUnit === 'day') {
-            return new Date(item.DateTime).toISOString().split('T')[0];
-        } else {
-            return new Date(item.DateTime);
         }
     });
-    const numPolls = data.map(item => item.num_polls);
-    const avgVotes = data.map(item => item.avg_votes_per_poll);
+}
 
-    return { labels, numPolls, avgVotes };
+function prepareChartData(data, isWeekly) {
+    if (isWeekly) {
+        const labels = Object.keys(data.num_polls).map(date => new Date(date));
+        const numPolls = Object.values(data.num_polls);
+        const avgVotes = Object.values(data.avg_votes_per_poll);
+        return { labels, numPolls, avgVotes };
+    } else {
+        const labels = Object.keys(data.num_polls);
+        const numPolls = Object.values(data.num_polls);
+        const avgVotes = Object.values(data.avg_votes_per_poll);
+        return { labels, numPolls, avgVotes };
+    }
 }
 
 function createPollsterAnalysisCharts(data) {
-    if (!data.pollster_weekly_stats || !Array.isArray(data.pollster_weekly_stats)) {
-        console.error('Dati non validi per l\'analisi dei sondaggisti');
-        return;
-    }
-
     const metrics = [
-        { id: 'pollster-num-polls-chart', key: 'cumulative_polls', title: 'Numero cumulativo di sondaggi per sondaggista' },
-        { id: 'pollster-total-votes-chart', key: 'cumulative_votes', title: 'Numero cumulativo di voti per sondaggista' },
-        { id: 'pollster-avg-votes-chart', key: 'avg_votes_per_poll', title: 'Media voti per sondaggio per sondaggista' }
+        { id: 'pollster-num-polls-chart', key: 'cumulative_polls', title: 'Numero di sondaggi per sondaggista' },
+        { id: 'pollster-total-votes-chart', key: 'cumulative_votes', title: 'Numero totale di voti per sondaggista' }
     ];
 
     metrics.forEach(metric => createPollsterChart(data.pollster_weekly_stats, metric));
@@ -220,81 +180,117 @@ function createPollsterChart(data, metric) {
     }
     const ctx = canvas.getContext('2d');
 
-    const pollstersData = processPollsterData(data, metric.key);
+    // Raggruppa i dati per settimana
+    const weeklyData = data.reduce((acc, item) => {
+        const week = item.Week;
+        if (!acc[week]) {
+            acc[week] = [];
+        }
+        acc[week].push(item);
+        return acc;
+    }, {});
 
-    try {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: pollstersData
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: metric.title,
-                        font: { size: 18 }
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    legend: {
-                        position: 'top',
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'week',
-                            displayFormats: { week: 'MMM yyyy' }
-                        },
-                        title: { display: true, text: 'Data' }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: metric.title }
-                    }
-                },
-                interaction: {
-                    mode: 'nearest',
-                    intersect: false,
-                    axis: 'x'
-                }
-            }
+    // Ordina i sondaggisti per ogni settimana
+    const sortedWeeklyData = Object.entries(weeklyData).map(([week, pollsters]) => {
+        const sortedPollsters = pollsters.sort((a, b) => b[metric.key] - a[metric.key]);
+        return [week, sortedPollsters];
+    }).sort(([a], [b]) => new Date(a) - new Date(b));
+
+    // Trova i primi cinque sondaggisti dell'ultima settimana
+    const lastWeekData = sortedWeeklyData[sortedWeeklyData.length - 1][1];
+    const topFivePollsters = lastWeekData.slice(0, 5).map(p => p.Author);
+
+    // Trova tutti i sondaggisti che sono stati primi almeno una volta
+    const everFirstPollsters = new Set();
+    sortedWeeklyData.forEach(([_, pollsters]) => {
+        if (pollsters.length > 0) {
+            everFirstPollsters.add(pollsters[0].Author);
+        }
+    });
+
+    // Unisci i primi cinque attuali e chi è mai stato primo, rimuovendo i duplicati
+    const pollstersToShow = [...new Set([...topFivePollsters, ...everFirstPollsters])];
+
+    // Prepara i dataset per i sondaggisti selezionati
+    const datasets = pollstersToShow.map((pollster, index) => {
+        const pollsterData = sortedWeeklyData.map(([week, pollsters]) => {
+            const pollsterInfo = pollsters.find(p => p.Author === pollster) || { [metric.key]: null };
+            return { x: new Date(week), y: pollsterInfo[metric.key] };
         });
-    } catch (error) {
-        console.error(`Errore nella creazione del grafico ${metric.title}:`, error);
-    }
-}
 
-function processPollsterData(data, metricKey) {
-    const pollsters = [...new Set(data.map(item => item.Author))];
-    const datasets = pollsters.map((pollster, index) => {
-        const pollsterData = data
-            .filter(item => item.Author === pollster)
-            .map(item => ({
-                x: new Date(item.Week),
-                y: item[metricKey]
-            }))
+        // Rimuovi i punti null e ordina i dati per data
+        const filteredData = pollsterData
+            .filter(point => point.y !== null)
             .sort((a, b) => a.x - b.x);
 
         return {
             label: pollster,
-            data: pollsterData,
+            data: filteredData,
             fill: false,
             borderColor: getRandomColor(),
             tension: 0.1,
-            pointRadius: 3,
+            pointRadius: 0,
             pointHoverRadius: 5,
             spanGaps: true
         };
     });
 
-    return datasets;
+    new Chart(ctx, {
+        type: 'line',
+        data: { datasets },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: metric.title,
+                    font: { size: 18 }
+                },
+                legend: {
+                    display: false, // Rimuove la legenda
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            return new Date(tooltipItems[0].parsed.x).toLocaleDateString();
+                        },
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toFixed(2);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'week',
+                        displayFormats: { week: 'MMM yyyy' }
+                    },
+                    title: { display: true, text: 'Data' }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: metric.title }
+                }
+            },
+            interaction: {
+                mode: 'nearest',
+                intersect: false,
+                axis: 'x'
+            }
+        }
+    });
 }
 
 function getRandomColor() {
@@ -313,6 +309,7 @@ function createRankings(data) {
         return;
     }
     
+    // Svuota il contenitore prima di aggiungere nuove classifiche
     container.innerHTML = '';
     
     const rankings = [
