@@ -20,8 +20,7 @@
                 "Renna": 3,
                 "Camoscio": 5,
                 "Coniglio": 58
-            },
-            "Category": "Altro"
+            }
         },
         "least_voted_poll": {
             "DateTime": "2024-06-08T19:08:00",
@@ -30,8 +29,7 @@
             "Options": {
                 "Ilaria Salis": 0,
                 "Christian Raimo": 1
-            },
-            "Category": "Altro"
+            }
         }
     },
     "weekly_stats": [
@@ -13770,14 +13768,5 @@
             "cumulative_votes": 6129,
             "avg_votes_per_poll": 31.111675126903553
         }
-    ],
-    "category_stats": {
-        "Altro": 11451,
-        "Studio": 87,
-        "Tecnologia": 125,
-        "Cibo": 14,
-        "Intrattenimento": 40,
-        "Sport": 14,
-        "Politica": 26
-    }
+    ]
 }
