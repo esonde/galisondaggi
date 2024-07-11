@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galisondaggi Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-bg">
+            <div class="header-overlay"></div>
+            <div class="header-content">
+                <h1>Galisondaggi Analytics</h1>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#dashboard" class="active">Dashboard</a></li>
+                <li><a href="#time-analysis">Analisi Temporale</a></li>
+                <li><a href="#pollster-analysis">Analisi Sondaggisti</a></li>
+                <li><a href="#rankings">Classifiche</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="dashboard" class="active">
+            <h2>Dashboard</h2>
+            <div class="dashboard-container">
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <h3>Totale Sondaggi</h3>
+                        <p id="total-polls"></p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Totale Voti</h3>
+                        <p id="total-votes"></p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Media Voti per Sondaggio</h3>
+                        <p id="avg-votes-per-poll"></p>
+                    </div>
+                </div>
+                <div class="poll-highlights">
+                    <div class="poll-box most-voted">
+                        <h3>Sondaggio Più Votato</h3>
+                        <div id="most-voted-poll"></div>
+                    </div>
+                    <div class="poll-box least-voted">
+                        <h3>Sondaggio Meno Votato</h3>
+                        <div id="least-voted-poll"></div>
+                    </div>
+                </div>
+                <div class="wordcloud-container">
+                    <img src="wordcloud.png" alt="Word Cloud dei sondaggi" id="wordcloud-image">
+                </div>
+            </div>
+        </section>
+        <section id="time-analysis">
+            <h2>Analisi Temporale</h2>
+            <div class="chart-container">
+                <canvas id="weekly-chart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="daily-chart"></canvas>
+            </div>
+        </section>
+        <section id="pollster-analysis">
+            <h2>Analisi Sondaggisti</h2>
+            <div class="chart-container">
+                <canvas id="pollster-num-polls-chart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="pollster-total-votes-chart"></canvas>
+            </div>
+        </section>
+        <section id="rankings">
+            <h2>Classifiche</h2>
+            <div id="rankings-container"></div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
