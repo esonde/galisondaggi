@@ -9,7 +9,10 @@ fetch('analysis_results.json')
         createRankings(data);
         setupImageZoom();
     })
-    .catch(error => console.error('Errore nel caricamento dei dati:', error));
+    .catch(error => {
+        console.error('Errore nel caricamento dei dati:', error);
+        document.body.innerHTML += `<p>Errore nel caricamento dei dati: ${error.message}</p>`;
+    });
 
 function updateDashboard(data) {
     if (data.basic_stats) {
@@ -53,22 +56,23 @@ function updatePollBox(elementId, pollData) {
 }
 
 function createTimeAnalysisCharts(data) {
-    if (data.weekly_stats && data.daily_stats) {
-        createChart('weekly-chart', 'Analisi Settimanale', data.weekly_stats, true);
-        createChart('daily-chart', 'Analisi Giornaliera', data.daily_stats, false);
+    if (data.weekly_stats && data.daily_stats && data.hourly_stats) {
+        createChart('weekly-chart', 'Analisi Settimanale', data.weekly_stats, 'week');
+        createChart('daily-chart', 'Analisi Giornaliera', data.daily_stats, 'day');
+        createChart('hourly-chart', 'Analisi Oraria', data.hourly_stats, 'hour');
     } else {
         console.error('Dati mancanti per l\'analisi temporale');
     }
 }
 
-function createChart(canvasId, title, data, isWeekly) {
+function createChart(canvasId, title, data, timeUnit) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) {
         console.error(`Canvas con id ${canvasId} non trovato`);
         return;
     }
     const ctx = canvas.getContext('2d');
-    const chartData = prepareChartData(data, isWeekly);
+    const chartData = prepareChartData(data, timeUnit);
     
     if (!chartData) {
         console.error(`Dati non validi per il grafico ${title}`);
@@ -122,18 +126,23 @@ function createChart(canvasId, title, data, isWeekly) {
                 },
                 scales: {
                     x: {
-                        type: isWeekly ? 'time' : 'category',
-                        time: isWeekly ? {
-                            unit: 'week',
-                            displayFormats: { week: 'MMM yyyy' }
+                        type: timeUnit !== 'hour' ? 'time' : 'category',
+                        time: timeUnit !== 'hour' ? {
+                            unit: timeUnit,
+                            displayFormats: { 
+                                week: 'MMM yyyy',
+                                day: 'dd MMM'
+                            }
                         } : undefined,
                         ticks: {
                             autoSkip: true,
                             maxTicksLimit: 12,
                             callback: function(value, index, values) {
-                                if (isWeekly) {
+                                if (timeUnit === 'week') {
                                     const date = new Date(value);
                                     return date.getDate() <= 7 ? date.toLocaleString('default', { month: 'short', year: 'numeric' }) : '';
+                                } else if (timeUnit === 'hour') {
+                                    return value + ':00';
                                 }
                                 return value;
                             }
@@ -152,8 +161,8 @@ function createChart(canvasId, title, data, isWeekly) {
                         position: 'right',
                         title: { display: true, text: 'Media voti per sondaggio' },
                         grid: { drawOnChartArea: false },
-                        min: isWeekly ? 0 : avgVotesMin,
-                        max: isWeekly ? undefined : avgVotesMax
+                        min: timeUnit !== 'hour' ? 0 : avgVotesMin,
+                        max: timeUnit !== 'hour' ? undefined : avgVotesMax
                     }
                 },
                 interaction: {
@@ -167,13 +176,21 @@ function createChart(canvasId, title, data, isWeekly) {
     }
 }
 
-function prepareChartData(data, isWeekly) {
+function prepareChartData(data, timeUnit) {
     if (!Array.isArray(data)) {
         console.error('I dati forniti non sono un array');
         return null;
     }
 
-    const labels = data.map(item => isWeekly ? new Date(item.Week) : item.DateTime);
+    const labels = data.map(item => {
+        if (timeUnit === 'hour') {
+            return new Date(item.DateTime).getHours();
+        } else if (timeUnit === 'day') {
+            return new Date(item.DateTime).toISOString().split('T')[0];
+        } else {
+            return new Date(item.DateTime);
+        }
+    });
     const numPolls = data.map(item => item.num_polls);
     const avgVotes = data.map(item => item.avg_votes_per_poll);
 
