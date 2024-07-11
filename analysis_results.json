@@ -20,8 +20,7 @@
                 "Renna": 3,
                 "Camoscio": 5,
                 "Coniglio": 58
-            },
-            "Category": "Altro"
+            }
         },
         "least_voted_poll": {
             "DateTime": "2024-06-08T19:08:00",
@@ -30,206 +29,1418 @@
             "Options": {
                 "Ilaria Salis": 0,
                 "Christian Raimo": 1
-            },
-            "Category": "Altro"
+            }
         }
     },
-    "weekly_stats": {
-        "num_polls": {
-            "2023-10-29T00:00:00.000": 8,
-            "2023-11-05T00:00:00.000": 58,
-            "2023-11-12T00:00:00.000": 296,
-            "2023-11-19T00:00:00.000": 147,
-            "2023-11-26T00:00:00.000": 195,
-            "2023-12-03T00:00:00.000": 394,
-            "2023-12-10T00:00:00.000": 344,
-            "2023-12-17T00:00:00.000": 287,
-            "2023-12-24T00:00:00.000": 493,
-            "2023-12-31T00:00:00.000": 629,
-            "2024-01-07T00:00:00.000": 345,
-            "2024-01-14T00:00:00.000": 425,
-            "2024-01-21T00:00:00.000": 318,
-            "2024-01-28T00:00:00.000": 303,
-            "2024-02-04T00:00:00.000": 308,
-            "2024-02-11T00:00:00.000": 305,
-            "2024-02-18T00:00:00.000": 299,
-            "2024-02-25T00:00:00.000": 288,
-            "2024-03-03T00:00:00.000": 305,
-            "2024-03-10T00:00:00.000": 262,
-            "2024-03-17T00:00:00.000": 288,
-            "2024-03-24T00:00:00.000": 242,
-            "2024-03-31T00:00:00.000": 392,
-            "2024-04-07T00:00:00.000": 380,
-            "2024-04-14T00:00:00.000": 253,
-            "2024-04-21T00:00:00.000": 413,
-            "2024-04-28T00:00:00.000": 417,
-            "2024-05-05T00:00:00.000": 452,
-            "2024-05-12T00:00:00.000": 342,
-            "2024-05-19T00:00:00.000": 455,
-            "2024-05-26T00:00:00.000": 417,
-            "2024-06-02T00:00:00.000": 358,
-            "2024-06-09T00:00:00.000": 426,
-            "2024-06-16T00:00:00.000": 386,
-            "2024-06-23T00:00:00.000": 295,
-            "2024-06-30T00:00:00.000": 232
+    "weekly_stats": [
+        {
+            "num_polls": 8,
+            "total_votes": 198,
+            "avg_votes_per_poll": 24.75
         },
-        "total_votes": {
-            "2023-10-29T00:00:00.000": 198,
-            "2023-11-05T00:00:00.000": 2049,
-            "2023-11-12T00:00:00.000": 10691,
-            "2023-11-19T00:00:00.000": 6100,
-            "2023-11-26T00:00:00.000": 7947,
-            "2023-12-03T00:00:00.000": 15039,
-            "2023-12-10T00:00:00.000": 14581,
-            "2023-12-17T00:00:00.000": 10844,
-            "2023-12-24T00:00:00.000": 18359,
-            "2023-12-31T00:00:00.000": 22062,
-            "2024-01-07T00:00:00.000": 12955,
-            "2024-01-14T00:00:00.000": 13270,
-            "2024-01-21T00:00:00.000": 12254,
-            "2024-01-28T00:00:00.000": 11488,
-            "2024-02-04T00:00:00.000": 11568,
-            "2024-02-11T00:00:00.000": 10019,
-            "2024-02-18T00:00:00.000": 11171,
-            "2024-02-25T00:00:00.000": 8198,
-            "2024-03-03T00:00:00.000": 10282,
-            "2024-03-10T00:00:00.000": 8911,
-            "2024-03-17T00:00:00.000": 9786,
-            "2024-03-24T00:00:00.000": 8898,
-            "2024-03-31T00:00:00.000": 14414,
-            "2024-04-07T00:00:00.000": 12921,
-            "2024-04-14T00:00:00.000": 8677,
-            "2024-04-21T00:00:00.000": 13808,
-            "2024-04-28T00:00:00.000": 13196,
-            "2024-05-05T00:00:00.000": 12825,
-            "2024-05-12T00:00:00.000": 11572,
-            "2024-05-19T00:00:00.000": 14463,
-            "2024-05-26T00:00:00.000": 14050,
-            "2024-06-02T00:00:00.000": 11233,
-            "2024-06-09T00:00:00.000": 12738,
-            "2024-06-16T00:00:00.000": 10446,
-            "2024-06-23T00:00:00.000": 8683,
-            "2024-06-30T00:00:00.000": 6458
+        {
+            "num_polls": 58,
+            "total_votes": 2049,
+            "avg_votes_per_poll": 35.327586206896555
         },
-        "avg_votes_per_poll": {
-            "2023-10-29T00:00:00.000": 24.75,
-            "2023-11-05T00:00:00.000": 35.3275862069,
-            "2023-11-12T00:00:00.000": 36.1182432432,
-            "2023-11-19T00:00:00.000": 41.4965986395,
-            "2023-11-26T00:00:00.000": 40.7538461538,
-            "2023-12-03T00:00:00.000": 38.1700507614,
-            "2023-12-10T00:00:00.000": 42.386627907,
-            "2023-12-17T00:00:00.000": 37.7839721254,
-            "2023-12-24T00:00:00.000": 37.2393509128,
-            "2023-12-31T00:00:00.000": 35.0747217806,
-            "2024-01-07T00:00:00.000": 37.5507246377,
-            "2024-01-14T00:00:00.000": 31.2235294118,
-            "2024-01-21T00:00:00.000": 38.534591195,
-            "2024-01-28T00:00:00.000": 37.9141914191,
-            "2024-02-04T00:00:00.000": 37.5584415584,
-            "2024-02-11T00:00:00.000": 32.8491803279,
-            "2024-02-18T00:00:00.000": 37.3612040134,
-            "2024-02-25T00:00:00.000": 28.4652777778,
-            "2024-03-03T00:00:00.000": 33.7114754098,
-            "2024-03-10T00:00:00.000": 34.0114503817,
-            "2024-03-17T00:00:00.000": 33.9791666667,
-            "2024-03-24T00:00:00.000": 36.7685950413,
-            "2024-03-31T00:00:00.000": 36.7704081633,
-            "2024-04-07T00:00:00.000": 34.0026315789,
-            "2024-04-14T00:00:00.000": 34.2964426877,
-            "2024-04-21T00:00:00.000": 33.4334140436,
-            "2024-04-28T00:00:00.000": 31.6450839329,
-            "2024-05-05T00:00:00.000": 28.3738938053,
-            "2024-05-12T00:00:00.000": 33.8362573099,
-            "2024-05-19T00:00:00.000": 31.7868131868,
-            "2024-05-26T00:00:00.000": 33.6930455635,
-            "2024-06-02T00:00:00.000": 31.3770949721,
-            "2024-06-09T00:00:00.000": 29.9014084507,
-            "2024-06-16T00:00:00.000": 27.0621761658,
-            "2024-06-23T00:00:00.000": 29.4338983051,
-            "2024-06-30T00:00:00.000": 27.8362068966
+        {
+            "num_polls": 296,
+            "total_votes": 10691,
+            "avg_votes_per_poll": 36.11824324324324
+        },
+        {
+            "num_polls": 147,
+            "total_votes": 6100,
+            "avg_votes_per_poll": 41.49659863945578
+        },
+        {
+            "num_polls": 195,
+            "total_votes": 7947,
+            "avg_votes_per_poll": 40.753846153846155
+        },
+        {
+            "num_polls": 394,
+            "total_votes": 15039,
+            "avg_votes_per_poll": 38.17005076142132
+        },
+        {
+            "num_polls": 344,
+            "total_votes": 14581,
+            "avg_votes_per_poll": 42.38662790697674
+        },
+        {
+            "num_polls": 287,
+            "total_votes": 10844,
+            "avg_votes_per_poll": 37.78397212543554
+        },
+        {
+            "num_polls": 493,
+            "total_votes": 18359,
+            "avg_votes_per_poll": 37.2393509127789
+        },
+        {
+            "num_polls": 629,
+            "total_votes": 22062,
+            "avg_votes_per_poll": 35.074721780604136
+        },
+        {
+            "num_polls": 345,
+            "total_votes": 12955,
+            "avg_votes_per_poll": 37.55072463768116
+        },
+        {
+            "num_polls": 425,
+            "total_votes": 13270,
+            "avg_votes_per_poll": 31.223529411764705
+        },
+        {
+            "num_polls": 318,
+            "total_votes": 12254,
+            "avg_votes_per_poll": 38.534591194968556
+        },
+        {
+            "num_polls": 303,
+            "total_votes": 11488,
+            "avg_votes_per_poll": 37.914191419141915
+        },
+        {
+            "num_polls": 308,
+            "total_votes": 11568,
+            "avg_votes_per_poll": 37.55844155844156
+        },
+        {
+            "num_polls": 305,
+            "total_votes": 10019,
+            "avg_votes_per_poll": 32.84918032786885
+        },
+        {
+            "num_polls": 299,
+            "total_votes": 11171,
+            "avg_votes_per_poll": 37.36120401337793
+        },
+        {
+            "num_polls": 288,
+            "total_votes": 8198,
+            "avg_votes_per_poll": 28.46527777777778
+        },
+        {
+            "num_polls": 305,
+            "total_votes": 10282,
+            "avg_votes_per_poll": 33.71147540983606
+        },
+        {
+            "num_polls": 262,
+            "total_votes": 8911,
+            "avg_votes_per_poll": 34.01145038167939
+        },
+        {
+            "num_polls": 288,
+            "total_votes": 9786,
+            "avg_votes_per_poll": 33.979166666666664
+        },
+        {
+            "num_polls": 242,
+            "total_votes": 8898,
+            "avg_votes_per_poll": 36.768595041322314
+        },
+        {
+            "num_polls": 392,
+            "total_votes": 14414,
+            "avg_votes_per_poll": 36.77040816326531
+        },
+        {
+            "num_polls": 380,
+            "total_votes": 12921,
+            "avg_votes_per_poll": 34.002631578947366
+        },
+        {
+            "num_polls": 253,
+            "total_votes": 8677,
+            "avg_votes_per_poll": 34.29644268774704
+        },
+        {
+            "num_polls": 413,
+            "total_votes": 13808,
+            "avg_votes_per_poll": 33.43341404358353
+        },
+        {
+            "num_polls": 417,
+            "total_votes": 13196,
+            "avg_votes_per_poll": 31.645083932853716
+        },
+        {
+            "num_polls": 452,
+            "total_votes": 12825,
+            "avg_votes_per_poll": 28.373893805309734
+        },
+        {
+            "num_polls": 342,
+            "total_votes": 11572,
+            "avg_votes_per_poll": 33.83625730994152
+        },
+        {
+            "num_polls": 455,
+            "total_votes": 14463,
+            "avg_votes_per_poll": 31.786813186813188
+        },
+        {
+            "num_polls": 417,
+            "total_votes": 14050,
+            "avg_votes_per_poll": 33.69304556354916
+        },
+        {
+            "num_polls": 358,
+            "total_votes": 11233,
+            "avg_votes_per_poll": 31.377094972067038
+        },
+        {
+            "num_polls": 426,
+            "total_votes": 12738,
+            "avg_votes_per_poll": 29.901408450704224
+        },
+        {
+            "num_polls": 386,
+            "total_votes": 10446,
+            "avg_votes_per_poll": 27.06217616580311
+        },
+        {
+            "num_polls": 295,
+            "total_votes": 8683,
+            "avg_votes_per_poll": 29.433898305084746
+        },
+        {
+            "num_polls": 232,
+            "total_votes": 6458,
+            "avg_votes_per_poll": 27.836206896551722
         }
-    },
-    "hourly_stats": {
-        "num_polls": {
-            "0": 846,
-            "1": 313,
-            "2": 83,
-            "3": 33,
-            "4": 22,
-            "5": 9,
-            "6": 8,
-            "7": 50,
-            "8": 199,
-            "9": 302,
-            "10": 582,
-            "11": 604,
-            "12": 667,
-            "13": 640,
-            "14": 694,
-            "15": 720,
-            "16": 688,
-            "17": 694,
-            "18": 719,
-            "19": 709,
-            "20": 764,
-            "21": 828,
-            "22": 780,
-            "23": 803
+    ],
+    "daily_stats": [
+        {
+            "num_polls": 8,
+            "total_votes": 198,
+            "avg_votes_per_poll": 24.75
         },
-        "total_votes": {
-            "0": 27795,
-            "1": 9734,
-            "2": 2535,
-            "3": 1063,
-            "4": 764,
-            "5": 274,
-            "6": 304,
-            "7": 1964,
-            "8": 6846,
-            "9": 10706,
-            "10": 19668,
-            "11": 20814,
-            "12": 23453,
-            "13": 23255,
-            "14": 24812,
-            "15": 25198,
-            "16": 24285,
-            "17": 24066,
-            "18": 24215,
-            "19": 24577,
-            "20": 27388,
-            "21": 27720,
-            "22": 25466,
-            "23": 25252
+        {
+            "num_polls": 10,
+            "total_votes": 327,
+            "avg_votes_per_poll": 32.7
         },
-        "avg_votes_per_poll": {
-            "0": 32.8546099291,
-            "1": 31.0990415335,
-            "2": 30.5421686747,
-            "3": 32.2121212121,
-            "4": 34.7272727273,
-            "5": 30.4444444444,
-            "6": 38.0,
-            "7": 39.28,
-            "8": 34.4020100503,
-            "9": 35.4503311258,
-            "10": 33.793814433,
-            "11": 34.4602649007,
-            "12": 35.1619190405,
-            "13": 36.3359375,
-            "14": 35.7521613833,
-            "15": 34.9972222222,
-            "16": 35.2979651163,
-            "17": 34.6772334294,
-            "18": 33.6787204451,
-            "19": 34.6643159379,
-            "20": 35.8481675393,
-            "21": 33.4782608696,
-            "22": 32.6487179487,
-            "23": 31.4470734745
+        {
+            "num_polls": 9,
+            "total_votes": 265,
+            "avg_votes_per_poll": 29.444444444444443
+        },
+        {
+            "num_polls": 7,
+            "total_votes": 235,
+            "avg_votes_per_poll": 33.57142857142857
+        },
+        {
+            "num_polls": 16,
+            "total_votes": 600,
+            "avg_votes_per_poll": 37.5
+        },
+        {
+            "num_polls": 9,
+            "total_votes": 359,
+            "avg_votes_per_poll": 39.888888888888886
+        },
+        {
+            "num_polls": 3,
+            "total_votes": 114,
+            "avg_votes_per_poll": 38.0
+        },
+        {
+            "num_polls": 4,
+            "total_votes": 149,
+            "avg_votes_per_poll": 37.25
+        },
+        {
+            "num_polls": 24,
+            "total_votes": 904,
+            "avg_votes_per_poll": 37.666666666666664
+        },
+        {
+            "num_polls": 53,
+            "total_votes": 1704,
+            "avg_votes_per_poll": 32.15094339622642
+        },
+        {
+            "num_polls": 15,
+            "total_votes": 393,
+            "avg_votes_per_poll": 26.2
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 1947,
+            "avg_votes_per_poll": 35.4
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 1980,
+            "avg_votes_per_poll": 36.0
+        },
+        {
+            "num_polls": 49,
+            "total_votes": 2288,
+            "avg_votes_per_poll": 46.69387755102041
+        },
+        {
+            "num_polls": 45,
+            "total_votes": 1475,
+            "avg_votes_per_poll": 32.77777777777778
+        },
+        {
+            "num_polls": 13,
+            "total_votes": 567,
+            "avg_votes_per_poll": 43.61538461538461
+        },
+        {
+            "num_polls": 22,
+            "total_votes": 889,
+            "avg_votes_per_poll": 40.40909090909091
+        },
+        {
+            "num_polls": 8,
+            "total_votes": 366,
+            "avg_votes_per_poll": 45.75
+        },
+        {
+            "num_polls": 18,
+            "total_votes": 665,
+            "avg_votes_per_poll": 36.94444444444444
+        },
+        {
+            "num_polls": 43,
+            "total_votes": 1460,
+            "avg_votes_per_poll": 33.95348837209303
+        },
+        {
+            "num_polls": 22,
+            "total_votes": 887,
+            "avg_votes_per_poll": 40.31818181818182
+        },
+        {
+            "num_polls": 21,
+            "total_votes": 1266,
+            "avg_votes_per_poll": 60.285714285714285
+        },
+        {
+            "num_polls": 19,
+            "total_votes": 860,
+            "avg_votes_per_poll": 45.26315789473684
+        },
+        {
+            "num_polls": 50,
+            "total_votes": 2215,
+            "avg_votes_per_poll": 44.3
+        },
+        {
+            "num_polls": 36,
+            "total_votes": 1354,
+            "avg_votes_per_poll": 37.611111111111114
+        },
+        {
+            "num_polls": 30,
+            "total_votes": 1333,
+            "avg_votes_per_poll": 44.43333333333333
+        },
+        {
+            "num_polls": 28,
+            "total_votes": 1111,
+            "avg_votes_per_poll": 39.67857142857143
+        },
+        {
+            "num_polls": 26,
+            "total_votes": 784,
+            "avg_votes_per_poll": 30.153846153846153
+        },
+        {
+            "num_polls": 6,
+            "total_votes": 290,
+            "avg_votes_per_poll": 48.333333333333336
+        },
+        {
+            "num_polls": 45,
+            "total_votes": 1892,
+            "avg_votes_per_poll": 42.044444444444444
+        },
+        {
+            "num_polls": 68,
+            "total_votes": 2577,
+            "avg_votes_per_poll": 37.89705882352941
+        },
+        {
+            "num_polls": 56,
+            "total_votes": 2047,
+            "avg_votes_per_poll": 36.55357142857143
+        },
+        {
+            "num_polls": 48,
+            "total_votes": 2043,
+            "avg_votes_per_poll": 42.5625
+        },
+        {
+            "num_polls": 52,
+            "total_votes": 1925,
+            "avg_votes_per_poll": 37.01923076923077
+        },
+        {
+            "num_polls": 41,
+            "total_votes": 1555,
+            "avg_votes_per_poll": 37.926829268292686
+        },
+        {
+            "num_polls": 84,
+            "total_votes": 3000,
+            "avg_votes_per_poll": 35.714285714285715
+        },
+        {
+            "num_polls": 70,
+            "total_votes": 2777,
+            "avg_votes_per_poll": 39.67142857142857
+        },
+        {
+            "num_polls": 49,
+            "total_votes": 1807,
+            "avg_votes_per_poll": 36.87755102040816
+        },
+        {
+            "num_polls": 89,
+            "total_votes": 3564,
+            "avg_votes_per_poll": 40.04494382022472
+        },
+        {
+            "num_polls": 37,
+            "total_votes": 1819,
+            "avg_votes_per_poll": 49.16216216216216
+        },
+        {
+            "num_polls": 36,
+            "total_votes": 1703,
+            "avg_votes_per_poll": 47.30555555555556
+        },
+        {
+            "num_polls": 50,
+            "total_votes": 2233,
+            "avg_votes_per_poll": 44.66
+        },
+        {
+            "num_polls": 13,
+            "total_votes": 678,
+            "avg_votes_per_poll": 52.15384615384615
+        },
+        {
+            "num_polls": 32,
+            "total_votes": 1300,
+            "avg_votes_per_poll": 40.625
+        },
+        {
+            "num_polls": 34,
+            "total_votes": 1677,
+            "avg_votes_per_poll": 49.3235294117647
+        },
+        {
+            "num_polls": 50,
+            "total_votes": 1710,
+            "avg_votes_per_poll": 34.2
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 1993,
+            "avg_votes_per_poll": 36.236363636363635
+        },
+        {
+            "num_polls": 29,
+            "total_votes": 884,
+            "avg_votes_per_poll": 30.482758620689655
+        },
+        {
+            "num_polls": 58,
+            "total_votes": 2113,
+            "avg_votes_per_poll": 36.43103448275862
+        },
+        {
+            "num_polls": 29,
+            "total_votes": 1167,
+            "avg_votes_per_poll": 40.241379310344826
+        },
+        {
+            "num_polls": 37,
+            "total_votes": 1558,
+            "avg_votes_per_poll": 42.108108108108105
+        },
+        {
+            "num_polls": 27,
+            "total_votes": 1102,
+            "avg_votes_per_poll": 40.81481481481482
+        },
+        {
+            "num_polls": 47,
+            "total_votes": 2049,
+            "avg_votes_per_poll": 43.59574468085106
+        },
+        {
+            "num_polls": 70,
+            "total_votes": 2679,
+            "avg_votes_per_poll": 38.27142857142857
+        },
+        {
+            "num_polls": 59,
+            "total_votes": 2285,
+            "avg_votes_per_poll": 38.728813559322035
+        },
+        {
+            "num_polls": 114,
+            "total_votes": 3876,
+            "avg_votes_per_poll": 34.0
+        },
+        {
+            "num_polls": 139,
+            "total_votes": 4810,
+            "avg_votes_per_poll": 34.60431654676259
+        },
+        {
+            "num_polls": 118,
+            "total_votes": 4137,
+            "avg_votes_per_poll": 35.059322033898304
+        },
+        {
+            "num_polls": 116,
+            "total_votes": 4151,
+            "avg_votes_per_poll": 35.78448275862069
+        },
+        {
+            "num_polls": 88,
+            "total_votes": 2969,
+            "avg_votes_per_poll": 33.73863636363637
+        },
+        {
+            "num_polls": 89,
+            "total_votes": 3180,
+            "avg_votes_per_poll": 35.73033707865169
+        },
+        {
+            "num_polls": 133,
+            "total_votes": 4588,
+            "avg_votes_per_poll": 34.49624060150376
+        },
+        {
+            "num_polls": 85,
+            "total_votes": 3037,
+            "avg_votes_per_poll": 35.72941176470588
+        },
+        {
+            "num_polls": 0,
+            "total_votes": 0,
+            "avg_votes_per_poll": NaN
+        },
+        {
+            "num_polls": 63,
+            "total_votes": 2898,
+            "avg_votes_per_poll": 46.0
+        },
+        {
+            "num_polls": 28,
+            "total_votes": 1239,
+            "avg_votes_per_poll": 44.25
+        },
+        {
+            "num_polls": 68,
+            "total_votes": 3022,
+            "avg_votes_per_poll": 44.44117647058823
+        },
+        {
+            "num_polls": 26,
+            "total_votes": 918,
+            "avg_votes_per_poll": 35.30769230769231
+        },
+        {
+            "num_polls": 66,
+            "total_votes": 2204,
+            "avg_votes_per_poll": 33.39393939393939
+        },
+        {
+            "num_polls": 49,
+            "total_votes": 1249,
+            "avg_votes_per_poll": 25.489795918367346
+        },
+        {
+            "num_polls": 45,
+            "total_votes": 1425,
+            "avg_votes_per_poll": 31.666666666666668
+        },
+        {
+            "num_polls": 80,
+            "total_votes": 2048,
+            "avg_votes_per_poll": 25.6
+        },
+        {
+            "num_polls": 26,
+            "total_votes": 758,
+            "avg_votes_per_poll": 29.153846153846153
+        },
+        {
+            "num_polls": 63,
+            "total_votes": 1880,
+            "avg_votes_per_poll": 29.841269841269842
+        },
+        {
+            "num_polls": 28,
+            "total_votes": 820,
+            "avg_votes_per_poll": 29.285714285714285
+        },
+        {
+            "num_polls": 76,
+            "total_votes": 2625,
+            "avg_votes_per_poll": 34.53947368421053
+        },
+        {
+            "num_polls": 60,
+            "total_votes": 2180,
+            "avg_votes_per_poll": 36.333333333333336
+        },
+        {
+            "num_polls": 92,
+            "total_votes": 2959,
+            "avg_votes_per_poll": 32.16304347826087
+        },
+        {
+            "num_polls": 34,
+            "total_votes": 1349,
+            "avg_votes_per_poll": 39.6764705882353
+        },
+        {
+            "num_polls": 30,
+            "total_votes": 1242,
+            "avg_votes_per_poll": 41.4
+        },
+        {
+            "num_polls": 38,
+            "total_votes": 1500,
+            "avg_votes_per_poll": 39.473684210526315
+        },
+        {
+            "num_polls": 64,
+            "total_votes": 2213,
+            "avg_votes_per_poll": 34.578125
+        },
+        {
+            "num_polls": 72,
+            "total_votes": 2515,
+            "avg_votes_per_poll": 34.93055555555556
+        },
+        {
+            "num_polls": 33,
+            "total_votes": 1277,
+            "avg_votes_per_poll": 38.696969696969695
+        },
+        {
+            "num_polls": 47,
+            "total_votes": 2158,
+            "avg_votes_per_poll": 45.91489361702128
+        },
+        {
+            "num_polls": 38,
+            "total_votes": 1358,
+            "avg_votes_per_poll": 35.73684210526316
+        },
+        {
+            "num_polls": 48,
+            "total_votes": 2004,
+            "avg_votes_per_poll": 41.75
+        },
+        {
+            "num_polls": 35,
+            "total_votes": 1171,
+            "avg_votes_per_poll": 33.457142857142856
+        },
+        {
+            "num_polls": 36,
+            "total_votes": 1449,
+            "avg_votes_per_poll": 40.25
+        },
+        {
+            "num_polls": 45,
+            "total_votes": 1647,
+            "avg_votes_per_poll": 36.6
+        },
+        {
+            "num_polls": 52,
+            "total_votes": 1754,
+            "avg_votes_per_poll": 33.73076923076923
+        },
+        {
+            "num_polls": 49,
+            "total_votes": 2105,
+            "avg_votes_per_poll": 42.95918367346939
+        },
+        {
+            "num_polls": 25,
+            "total_votes": 1198,
+            "avg_votes_per_poll": 47.92
+        },
+        {
+            "num_polls": 77,
+            "total_votes": 2978,
+            "avg_votes_per_poll": 38.675324675324674
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1296,
+            "avg_votes_per_poll": 33.23076923076923
+        },
+        {
+            "num_polls": 38,
+            "total_votes": 1422,
+            "avg_votes_per_poll": 37.421052631578945
+        },
+        {
+            "num_polls": 40,
+            "total_votes": 1364,
+            "avg_votes_per_poll": 34.1
+        },
+        {
+            "num_polls": 44,
+            "total_votes": 1686,
+            "avg_votes_per_poll": 38.31818181818182
+        },
+        {
+            "num_polls": 45,
+            "total_votes": 1624,
+            "avg_votes_per_poll": 36.08888888888889
+        },
+        {
+            "num_polls": 34,
+            "total_votes": 1281,
+            "avg_votes_per_poll": 37.6764705882353
+        },
+        {
+            "num_polls": 54,
+            "total_votes": 1621,
+            "avg_votes_per_poll": 30.01851851851852
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1269,
+            "avg_votes_per_poll": 32.53846153846154
+        },
+        {
+            "num_polls": 38,
+            "total_votes": 1268,
+            "avg_votes_per_poll": 33.36842105263158
+        },
+        {
+            "num_polls": 38,
+            "total_votes": 1337,
+            "avg_votes_per_poll": 35.18421052631579
+        },
+        {
+            "num_polls": 59,
+            "total_votes": 2145,
+            "avg_votes_per_poll": 36.355932203389834
+        },
+        {
+            "num_polls": 43,
+            "total_votes": 1098,
+            "avg_votes_per_poll": 25.53488372093023
+        },
+        {
+            "num_polls": 54,
+            "total_votes": 2011,
+            "avg_votes_per_poll": 37.24074074074074
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 2261,
+            "avg_votes_per_poll": 41.10909090909091
+        },
+        {
+            "num_polls": 34,
+            "total_votes": 1061,
+            "avg_votes_per_poll": 31.205882352941178
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1605,
+            "avg_votes_per_poll": 41.15384615384615
+        },
+        {
+            "num_polls": 27,
+            "total_votes": 1012,
+            "avg_votes_per_poll": 37.48148148148148
+        },
+        {
+            "num_polls": 53,
+            "total_votes": 1926,
+            "avg_votes_per_poll": 36.339622641509436
+        },
+        {
+            "num_polls": 37,
+            "total_votes": 1295,
+            "avg_votes_per_poll": 35.0
+        },
+        {
+            "num_polls": 51,
+            "total_votes": 1651,
+            "avg_votes_per_poll": 32.372549019607845
+        },
+        {
+            "num_polls": 40,
+            "total_votes": 983,
+            "avg_votes_per_poll": 24.575
+        },
+        {
+            "num_polls": 47,
+            "total_votes": 1387,
+            "avg_votes_per_poll": 29.51063829787234
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 1507,
+            "avg_votes_per_poll": 27.4
+        },
+        {
+            "num_polls": 37,
+            "total_votes": 1073,
+            "avg_votes_per_poll": 29.0
+        },
+        {
+            "num_polls": 41,
+            "total_votes": 1103,
+            "avg_votes_per_poll": 26.902439024390244
+        },
+        {
+            "num_polls": 17,
+            "total_votes": 494,
+            "avg_votes_per_poll": 29.058823529411764
+        },
+        {
+            "num_polls": 34,
+            "total_votes": 1251,
+            "avg_votes_per_poll": 36.794117647058826
+        },
+        {
+            "num_polls": 50,
+            "total_votes": 1739,
+            "avg_votes_per_poll": 34.78
+        },
+        {
+            "num_polls": 81,
+            "total_votes": 2550,
+            "avg_votes_per_poll": 31.48148148148148
+        },
+        {
+            "num_polls": 30,
+            "total_votes": 921,
+            "avg_votes_per_poll": 30.7
+        },
+        {
+            "num_polls": 32,
+            "total_votes": 1200,
+            "avg_votes_per_poll": 37.5
+        },
+        {
+            "num_polls": 36,
+            "total_votes": 1157,
+            "avg_votes_per_poll": 32.138888888888886
+        },
+        {
+            "num_polls": 42,
+            "total_votes": 1464,
+            "avg_votes_per_poll": 34.857142857142854
+        },
+        {
+            "num_polls": 10,
+            "total_votes": 352,
+            "avg_votes_per_poll": 35.2
+        },
+        {
+            "num_polls": 21,
+            "total_votes": 671,
+            "avg_votes_per_poll": 31.952380952380953
+        },
+        {
+            "num_polls": 46,
+            "total_votes": 1399,
+            "avg_votes_per_poll": 30.41304347826087
+        },
+        {
+            "num_polls": 35,
+            "total_votes": 1232,
+            "avg_votes_per_poll": 35.2
+        },
+        {
+            "num_polls": 44,
+            "total_votes": 1305,
+            "avg_votes_per_poll": 29.65909090909091
+        },
+        {
+            "num_polls": 18,
+            "total_votes": 586,
+            "avg_votes_per_poll": 32.55555555555556
+        },
+        {
+            "num_polls": 88,
+            "total_votes": 3366,
+            "avg_votes_per_poll": 38.25
+        },
+        {
+            "num_polls": 43,
+            "total_votes": 1310,
+            "avg_votes_per_poll": 30.46511627906977
+        },
+        {
+            "num_polls": 28,
+            "total_votes": 1036,
+            "avg_votes_per_poll": 37.0
+        },
+        {
+            "num_polls": 33,
+            "total_votes": 1126,
+            "avg_votes_per_poll": 34.121212121212125
+        },
+        {
+            "num_polls": 90,
+            "total_votes": 2620,
+            "avg_votes_per_poll": 29.11111111111111
+        },
+        {
+            "num_polls": 18,
+            "total_votes": 688,
+            "avg_votes_per_poll": 38.22222222222222
+        },
+        {
+            "num_polls": 45,
+            "total_votes": 1855,
+            "avg_votes_per_poll": 41.22222222222222
+        },
+        {
+            "num_polls": 31,
+            "total_votes": 1151,
+            "avg_votes_per_poll": 37.12903225806452
+        },
+        {
+            "num_polls": 22,
+            "total_votes": 865,
+            "avg_votes_per_poll": 39.31818181818182
+        },
+        {
+            "num_polls": 34,
+            "total_votes": 1251,
+            "avg_votes_per_poll": 36.794117647058826
+        },
+        {
+            "num_polls": 40,
+            "total_votes": 1321,
+            "avg_votes_per_poll": 33.025
+        },
+        {
+            "num_polls": 28,
+            "total_votes": 939,
+            "avg_votes_per_poll": 33.535714285714285
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1607,
+            "avg_votes_per_poll": 41.205128205128204
+        },
+        {
+            "num_polls": 32,
+            "total_votes": 1379,
+            "avg_votes_per_poll": 43.09375
+        },
+        {
+            "num_polls": 47,
+            "total_votes": 1536,
+            "avg_votes_per_poll": 32.680851063829785
+        },
+        {
+            "num_polls": 22,
+            "total_votes": 817,
+            "avg_votes_per_poll": 37.13636363636363
+        },
+        {
+            "num_polls": 35,
+            "total_votes": 1456,
+            "avg_votes_per_poll": 41.6
+        },
+        {
+            "num_polls": 41,
+            "total_votes": 1584,
+            "avg_votes_per_poll": 38.63414634146341
+        },
+        {
+            "num_polls": 56,
+            "total_votes": 2359,
+            "avg_votes_per_poll": 42.125
+        },
+        {
+            "num_polls": 50,
+            "total_votes": 1862,
+            "avg_votes_per_poll": 37.24
+        },
+        {
+            "num_polls": 99,
+            "total_votes": 3264,
+            "avg_votes_per_poll": 32.96969696969697
+        },
+        {
+            "num_polls": 89,
+            "total_votes": 3072,
+            "avg_votes_per_poll": 34.51685393258427
+        },
+        {
+            "num_polls": 82,
+            "total_votes": 2655,
+            "avg_votes_per_poll": 32.3780487804878
+        },
+        {
+            "num_polls": 42,
+            "total_votes": 1512,
+            "avg_votes_per_poll": 36.0
+        },
+        {
+            "num_polls": 68,
+            "total_votes": 2038,
+            "avg_votes_per_poll": 29.970588235294116
+        },
+        {
+            "num_polls": 51,
+            "total_votes": 1849,
+            "avg_votes_per_poll": 36.254901960784316
+        },
+        {
+            "num_polls": 76,
+            "total_votes": 2435,
+            "avg_votes_per_poll": 32.03947368421053
+        },
+        {
+            "num_polls": 44,
+            "total_votes": 1742,
+            "avg_votes_per_poll": 39.59090909090909
+        },
+        {
+            "num_polls": 17,
+            "total_votes": 690,
+            "avg_votes_per_poll": 40.588235294117645
+        },
+        {
+            "num_polls": 32,
+            "total_votes": 972,
+            "avg_votes_per_poll": 30.375
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1400,
+            "avg_votes_per_poll": 35.8974358974359
+        },
+        {
+            "num_polls": 44,
+            "total_votes": 1392,
+            "avg_votes_per_poll": 31.636363636363637
+        },
+        {
+            "num_polls": 25,
+            "total_votes": 950,
+            "avg_votes_per_poll": 38.0
+        },
+        {
+            "num_polls": 17,
+            "total_votes": 595,
+            "avg_votes_per_poll": 35.0
+        },
+        {
+            "num_polls": 31,
+            "total_votes": 1189,
+            "avg_votes_per_poll": 38.354838709677416
+        },
+        {
+            "num_polls": 65,
+            "total_votes": 2179,
+            "avg_votes_per_poll": 33.52307692307692
+        },
+        {
+            "num_polls": 16,
+            "total_votes": 721,
+            "avg_votes_per_poll": 45.0625
+        },
+        {
+            "num_polls": 63,
+            "total_votes": 2228,
+            "avg_votes_per_poll": 35.36507936507937
+        },
+        {
+            "num_polls": 79,
+            "total_votes": 2220,
+            "avg_votes_per_poll": 28.10126582278481
+        },
+        {
+            "num_polls": 21,
+            "total_votes": 828,
+            "avg_votes_per_poll": 39.42857142857143
+        },
+        {
+            "num_polls": 43,
+            "total_votes": 1200,
+            "avg_votes_per_poll": 27.906976744186046
+        },
+        {
+            "num_polls": 47,
+            "total_votes": 1501,
+            "avg_votes_per_poll": 31.93617021276596
+        },
+        {
+            "num_polls": 144,
+            "total_votes": 5110,
+            "avg_votes_per_poll": 35.486111111111114
+        },
+        {
+            "num_polls": 52,
+            "total_votes": 1478,
+            "avg_votes_per_poll": 28.423076923076923
+        },
+        {
+            "num_polls": 47,
+            "total_votes": 1618,
+            "avg_votes_per_poll": 34.42553191489362
+        },
+        {
+            "num_polls": 67,
+            "total_votes": 2208,
+            "avg_votes_per_poll": 32.95522388059702
+        },
+        {
+            "num_polls": 21,
+            "total_votes": 857,
+            "avg_votes_per_poll": 40.80952380952381
+        },
+        {
+            "num_polls": 96,
+            "total_votes": 2777,
+            "avg_votes_per_poll": 28.927083333333332
+        },
+        {
+            "num_polls": 62,
+            "total_votes": 1970,
+            "avg_votes_per_poll": 31.774193548387096
+        },
+        {
+            "num_polls": 72,
+            "total_votes": 2288,
+            "avg_votes_per_poll": 31.77777777777778
+        },
+        {
+            "num_polls": 104,
+            "total_votes": 2357,
+            "avg_votes_per_poll": 22.66346153846154
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 1503,
+            "avg_votes_per_poll": 27.327272727272728
+        },
+        {
+            "num_polls": 22,
+            "total_votes": 613,
+            "avg_votes_per_poll": 27.863636363636363
+        },
+        {
+            "num_polls": 52,
+            "total_votes": 1618,
+            "avg_votes_per_poll": 31.115384615384617
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 1713,
+            "avg_votes_per_poll": 31.145454545454545
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1222,
+            "avg_votes_per_poll": 31.333333333333332
+        },
+        {
+            "num_polls": 125,
+            "total_votes": 3799,
+            "avg_votes_per_poll": 30.392
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1180,
+            "avg_votes_per_poll": 30.256410256410255
+        },
+        {
+            "num_polls": 79,
+            "total_votes": 2659,
+            "avg_votes_per_poll": 33.65822784810127
+        },
+        {
+            "num_polls": 37,
+            "total_votes": 1337,
+            "avg_votes_per_poll": 36.13513513513514
+        },
+        {
+            "num_polls": 82,
+            "total_votes": 2602,
+            "avg_votes_per_poll": 31.73170731707317
+        },
+        {
+            "num_polls": 33,
+            "total_votes": 1242,
+            "avg_votes_per_poll": 37.63636363636363
+        },
+        {
+            "num_polls": 30,
+            "total_votes": 1072,
+            "avg_votes_per_poll": 35.733333333333334
+        },
+        {
+            "num_polls": 42,
+            "total_votes": 1480,
+            "avg_votes_per_poll": 35.23809523809524
+        },
+        {
+            "num_polls": 63,
+            "total_votes": 2234,
+            "avg_votes_per_poll": 35.46031746031746
+        },
+        {
+            "num_polls": 51,
+            "total_votes": 1679,
+            "avg_votes_per_poll": 32.92156862745098
+        },
+        {
+            "num_polls": 83,
+            "total_votes": 2584,
+            "avg_votes_per_poll": 31.132530120481928
+        },
+        {
+            "num_polls": 71,
+            "total_votes": 1864,
+            "avg_votes_per_poll": 26.253521126760564
+        },
+        {
+            "num_polls": 68,
+            "total_votes": 2173,
+            "avg_votes_per_poll": 31.955882352941178
+        },
+        {
+            "num_polls": 23,
+            "total_votes": 734,
+            "avg_votes_per_poll": 31.91304347826087
+        },
+        {
+            "num_polls": 96,
+            "total_votes": 3195,
+            "avg_votes_per_poll": 33.28125
+        },
+        {
+            "num_polls": 58,
+            "total_votes": 2067,
+            "avg_votes_per_poll": 35.63793103448276
+        },
+        {
+            "num_polls": 62,
+            "total_votes": 1943,
+            "avg_votes_per_poll": 31.338709677419356
+        },
+        {
+            "num_polls": 65,
+            "total_votes": 2078,
+            "avg_votes_per_poll": 31.96923076923077
+        },
+        {
+            "num_polls": 47,
+            "total_votes": 1735,
+            "avg_votes_per_poll": 36.91489361702128
+        },
+        {
+            "num_polls": 80,
+            "total_votes": 2645,
+            "avg_votes_per_poll": 33.0625
+        },
+        {
+            "num_polls": 50,
+            "total_votes": 1555,
+            "avg_votes_per_poll": 31.1
+        },
+        {
+            "num_polls": 55,
+            "total_votes": 2027,
+            "avg_votes_per_poll": 36.85454545454545
+        },
+        {
+            "num_polls": 54,
+            "total_votes": 1561,
+            "avg_votes_per_poll": 28.90740740740741
+        },
+        {
+            "num_polls": 59,
+            "total_votes": 2124,
+            "avg_votes_per_poll": 36.0
+        },
+        {
+            "num_polls": 63,
+            "total_votes": 1807,
+            "avg_votes_per_poll": 28.682539682539684
+        },
+        {
+            "num_polls": 66,
+            "total_votes": 1949,
+            "avg_votes_per_poll": 29.53030303030303
+        },
+        {
+            "num_polls": 38,
+            "total_votes": 1100,
+            "avg_votes_per_poll": 28.94736842105263
+        },
+        {
+            "num_polls": 21,
+            "total_votes": 771,
+            "avg_votes_per_poll": 36.714285714285715
+        },
+        {
+            "num_polls": 57,
+            "total_votes": 1921,
+            "avg_votes_per_poll": 33.70175438596491
+        },
+        {
+            "num_polls": 51,
+            "total_votes": 1577,
+            "avg_votes_per_poll": 30.92156862745098
+        },
+        {
+            "num_polls": 59,
+            "total_votes": 1704,
+            "avg_votes_per_poll": 28.88135593220339
+        },
+        {
+            "num_polls": 28,
+            "total_votes": 1445,
+            "avg_votes_per_poll": 51.607142857142854
+        },
+        {
+            "num_polls": 75,
+            "total_votes": 2055,
+            "avg_votes_per_poll": 27.4
+        },
+        {
+            "num_polls": 42,
+            "total_votes": 1160,
+            "avg_votes_per_poll": 27.61904761904762
+        },
+        {
+            "num_polls": 95,
+            "total_votes": 2295,
+            "avg_votes_per_poll": 24.157894736842106
+        },
+        {
+            "num_polls": 76,
+            "total_votes": 2502,
+            "avg_votes_per_poll": 32.921052631578945
+        },
+        {
+            "num_polls": 81,
+            "total_votes": 2078,
+            "avg_votes_per_poll": 25.65432098765432
+        },
+        {
+            "num_polls": 67,
+            "total_votes": 2156,
+            "avg_votes_per_poll": 32.17910447761194
+        },
+        {
+            "num_polls": 54,
+            "total_votes": 1385,
+            "avg_votes_per_poll": 25.64814814814815
+        },
+        {
+            "num_polls": 29,
+            "total_votes": 727,
+            "avg_votes_per_poll": 25.06896551724138
+        },
+        {
+            "num_polls": 46,
+            "total_votes": 1340,
+            "avg_votes_per_poll": 29.130434782608695
+        },
+        {
+            "num_polls": 80,
+            "total_votes": 1908,
+            "avg_votes_per_poll": 23.85
+        },
+        {
+            "num_polls": 29,
+            "total_votes": 852,
+            "avg_votes_per_poll": 29.379310344827587
+        },
+        {
+            "num_polls": 42,
+            "total_votes": 1205,
+            "avg_votes_per_poll": 28.69047619047619
+        },
+        {
+            "num_polls": 57,
+            "total_votes": 1655,
+            "avg_votes_per_poll": 29.035087719298247
+        },
+        {
+            "num_polls": 53,
+            "total_votes": 1493,
+            "avg_votes_per_poll": 28.169811320754718
+        },
+        {
+            "num_polls": 33,
+            "total_votes": 897,
+            "avg_votes_per_poll": 27.181818181818183
+        },
+        {
+            "num_polls": 33,
+            "total_votes": 1028,
+            "avg_votes_per_poll": 31.151515151515152
+        },
+        {
+            "num_polls": 44,
+            "total_votes": 1254,
+            "avg_votes_per_poll": 28.5
+        },
+        {
+            "num_polls": 33,
+            "total_votes": 1151,
+            "avg_votes_per_poll": 34.878787878787875
+        },
+        {
+            "num_polls": 63,
+            "total_votes": 1608,
+            "avg_votes_per_poll": 25.523809523809526
+        },
+        {
+            "num_polls": 49,
+            "total_votes": 1481,
+            "avg_votes_per_poll": 30.224489795918366
+        },
+        {
+            "num_polls": 39,
+            "total_votes": 1126,
+            "avg_votes_per_poll": 28.871794871794872
+        },
+        {
+            "num_polls": 34,
+            "total_votes": 1071,
+            "avg_votes_per_poll": 31.5
+        },
+        {
+            "num_polls": 38,
+            "total_votes": 946,
+            "avg_votes_per_poll": 24.894736842105264
+        },
+        {
+            "num_polls": 9,
+            "total_votes": 226,
+            "avg_votes_per_poll": 25.11111111111111
         }
-    },
+    ],
     "rankings": {
         "by_polls": [
             [
@@ -12557,14 +13768,5 @@
             "cumulative_votes": 6129,
             "avg_votes_per_poll": 31.111675126903553
         }
-    ],
-    "category_stats": {
-        "Altro": 11451,
-        "Studio": 87,
-        "Tecnologia": 125,
-        "Cibo": 14,
-        "Intrattenimento": 40,
-        "Sport": 14,
-        "Politica": 26
-    }
+    ]
 }
