@@ -254,6 +254,14 @@ h2 {
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     box-sizing: border-box;
+    display: flex; /* Aggiungi questa linea */
+    justify-content: center; /* Aggiungi questa linea */
+    align-items: center; /* Aggiungi questa linea */
+}
+
+.chart-container canvas {
+    width: 100% !important; /* Aggiungi questa linea */
+    height: 100% !important; /* Aggiungi questa linea */
 }
 
 #rankings-container {
