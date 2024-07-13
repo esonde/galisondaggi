@@ -48,14 +48,6 @@
         "Unanimous Answer": "Si"
     },
     {
-        "Question": ".",
-        "Options": {
-            "Altro (specificare)": 7,
-            "Non ne ho una (sono strano)": 0
-        },
-        "Unanimous Answer": "Altro (specificare)"
-    },
-    {
         "Question": "Avete visto Creators the past?",
         "Options": {
             "Sì": 0,
@@ -88,14 +80,6 @@
             "Nessuna": 19
         },
         "Unanimous Answer": "Nessuna"
-    },
-    {
-        "Question": "Preferisci",
-        "Options": {
-            "Stalin": 17,
-            "Polpot": 0
-        },
-        "Unanimous Answer": "Stalin"
     },
     {
         "Question": "Io top 7% fan di Barbero. Voi?",
@@ -757,6 +741,14 @@
         "Unanimous Answer": "Familiari"
     },
     {
+        "Question": "Scrivi...",
+        "Options": {
+            "Familiari": 32,
+            "Famigliari": 0
+        },
+        "Unanimous Answer": "Familiari"
+    },
+    {
         "Question": "Una bugia che fa star male te ma che serve a non ferire qualcuno a cui vuoi molto bene",
         "Options": {
             "Vale la pena": 28,
@@ -1066,6 +1058,14 @@
         "Unanimous Answer": "Si"
     },
     {
+        "Question": "Va interpretata come una candidatura?",
+        "Options": {
+            "Si": 19,
+            "No": 0
+        },
+        "Unanimous Answer": "Si"
+    },
+    {
         "Question": ".",
         "Options": {
             "_il_ bueno": 42,
@@ -1178,6 +1178,14 @@
         "Unanimous Answer": "la timeline"
     },
     {
+        "Question": ".",
+        "Options": {
+            "il timeline": 0,
+            "la timeline": 44
+        },
+        "Unanimous Answer": "la timeline"
+    },
+    {
         "Question": "Meglio",
         "Options": {
             "Dodò dell'albero azzurro": 21,
@@ -1262,14 +1270,6 @@
             "non penso lo abbia fatto": 0
         },
         "Unanimous Answer": "sì"
-    },
-    {
-        "Question": "Si ma",
-        "Options": {
-            "Ilaria Salis": 0,
-            "Christian Raimo": 1
-        },
-        "Unanimous Answer": "Christian Raimo"
     },
     {
         "Question": "Ritieni giusto che i francesi della Nuova Caledonia abbiano potuto votare alle europee?",
@@ -1414,7 +1414,7 @@
         "Question": "“Venire in 20s è il più bel complimento che si possa fare a una donna” (io lo modifico in “a una qualsiasi persona con cui si giace”)",
         "Options": {
             "Vero": 0,
-            "Falso": 19
+            "Falso": 20
         },
         "Unanimous Answer": "Falso"
     },
@@ -1445,7 +1445,7 @@
     {
         "Question": "le bestemmie liberatorie vanno bene su GaliPorco?",
         "Options": {
-            "Sì, sono pur sempre bestemmie": 20,
+            "Sì, sono pur sempre bestemmie": 21,
             "No, su GaliPorco si bestemmia solo per le cose brutte per essere consolati (fanculo Galicoccole)": 0
         },
         "Unanimous Answer": "Sì, sono pur sempre bestemmie"
@@ -1453,7 +1453,7 @@
     {
         "Question": "Se ci fosse una guerra mondiale, sarebbe giusto reclutare solo uomini?",
         "Options": {
-            "Certo che no": 17,
+            "Certo che no": 18,
             "Certo che sì": 0
         },
         "Unanimous Answer": "Certo che no"
@@ -1470,14 +1470,14 @@
         "Question": "Hai mai provato Cédric Grolet?",
         "Options": {
             "Sì": 0,
-            "No": 28
+            "No": 29
         },
         "Unanimous Answer": "No"
     },
     {
         "Question": "Sei su una barca che sta affondando nell’anno 1916 e puoi salvarne solo uno:",
         "Options": {
-            "Stalin": 16,
+            "Stalin": 17,
             "Hitler": 0
         },
         "Unanimous Answer": "Stalin"
@@ -1489,5 +1489,46 @@
             "sì, sorpresa assoluta, non mi sarei mai aspettato nulla del genere": 0
         },
         "Unanimous Answer": "no, è chiaro come il sole che siano così"
+    },
+    {
+        "Question": "Terry Crews per interpretare Rapunzel nel live action",
+        "Options": {
+            "Count me in": 5,
+            "Gnooo è n-PELATO PELATO COME SI FA I CAPELLI IMPORTANTISSIMISSIMI IN RAPUNZEL": 0
+        },
+        "Unanimous Answer": "Count me in"
+    },
+    {
+        "Question": "Meglio svegliarsi domani mattina ed",
+        "Options": {
+            "Eliminare tutte le medicine e lasciare la gente al proprio destino": 0,
+            "Avere una cura per ogni malattia e terminare la vita delle persone in maniera artificiale a 85 anni": 28
+        },
+        "Unanimous Answer": "Avere una cura per ogni malattia e terminare la vita delle persone in maniera artificiale a 85 anni"
+    },
+    {
+        "Question": "\"Gli ASMR rilassano per il riferimento sessuale dei loro suoni\"",
+        "Options": {
+            "Sono d'accordo": 0,
+            "Non sono d'accordo": 21
+        },
+        "Unanimous Answer": "Non sono d'accordo"
+    },
+    {
+        "Question": "Equipe 84, _Un angelo blu_",
+        "Options": {
+            "🍪": 19,
+            "Conosco, clamoros": 0,
+            "Conosco, 💀🚩": 0
+        },
+        "Unanimous Answer": "🍪"
+    },
+    {
+        "Question": "https://esonde.github.io/galisondaggi/",
+        "Options": {
+            "Accettabile": 14,
+            "Inaccettabile": 0
+        },
+        "Unanimous Answer": "Accettabile"
     }
 ]
