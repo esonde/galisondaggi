@@ -482,23 +482,34 @@ function createMoodChart(moodData) {
                             });
                         },
                         label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
+                            if (context.datasetIndex === 0) {
+                                return `Media del benessere: ${context.parsed.y.toFixed(2)}`;
                             }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toFixed(2) + (context.datasetIndex === 0 ? '' : '%');
-                            }
-                            return label;
+                            return null;  // Ritorna null per gli altri dataset, li gestiremo in afterBody
+                        },
+                        afterBody: function(tooltipItems) {
+                            const date = new Date(tooltipItems[0].parsed.x);
+                            const dateStr = date.toISOString().split('T')[0];
+                            const moodCounts = moodData.daily_moods[dateStr] || {};
+                            const total = Object.values(moodCounts).reduce((sum, count) => sum + count, 0);
+
+                            // Calcola le percentuali e ordina le opzioni
+                            const sortedOptions = Object.entries(moodCounts)
+                                .map(([emoji, count]) => ({
+                                    emoji,
+                                    percentage: total > 0 ? (count / total * 100) : 0
+                                }))
+                                .sort((a, b) => b.percentage - a.percentage);
+
+                            // Crea le stringhe per il tooltip
+                            return sortedOptions.map(option => 
+                                `${option.emoji}: ${option.percentage.toFixed(2)}%`
+                            );
                         }
                     }
                 },
                 legend: {
-                    labels: {
-                        filter: function(item, chart) {
-                            return item.text !== 'Media del benessere';
-                        }
-                    }
+                    display: false  // Rimuove la legenda
                 }
             }
         }
