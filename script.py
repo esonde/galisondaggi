@@ -5,20 +5,41 @@ from collections import defaultdict
 import random
 import os
 
-# Funzioni per la generazione di nomi di fantasia e l'anonimizzazione
 def generate_fantasy_name():
-    aggettivi = [
+    aggettivi_maschili = [
         "Brillante", "Saggio", "Energico", "Creativo", "Vivace", "Intrepido", "Curioso", "Resiliente",
         "Arguto", "Spiritoso", "Ingegnoso", "Audace", "Perspicace", "Diligente", "Versatile", "Dinamico",
         "Eclettico", "Innovativo", "Tenace", "Proattivo", "Carismatico", "Empatico", "Intuitivo", "Pragmatico",
         "Analitico", "Visionario", "Determinato", "Affidabile", "Sincero", "Ottimista"
     ]
-    nomi = [
-        "Fenice", "Drago", "Unicorno", "Sirena", "Grifone", "Pegaso", "Mago", "Elfo", "Cavaliere", "Strega",
-        "Gigante", "Troll", "Ninfa", "Driade", "Fata", "Licantropo", "Vampiro", "Golem", "Chimera", "Minotauro",
-        "Medusa", "Cerbero", "Ciclope", "Hobbit", "Ent", "Balrog", "Orco", "Goblin", "Spiritello", "Folletto"
+    aggettivi_femminili = [
+        "Brillante", "Saggia", "Energica", "Creativa", "Vivace", "Intrepida", "Curiosa", "Resiliente",
+        "Arguta", "Spiritosa", "Ingegnosa", "Audace", "Perspicace", "Diligente", "Versatile", "Dinamica",
+        "Eclettica", "Innovativa", "Tenace", "Proattiva", "Carismatica", "Empatica", "Intuitiva", "Pragmatica",
+        "Analitica", "Visionaria", "Determinata", "Affidabile", "Sincera", "Ottimista"
     ]
-    return random.choice(aggettivi) + " " + random.choice(nomi)
+    nomi_maschili = [
+        "Drago", "Unicorno", "Grifone", "Pegaso", "Mago", "Cavaliere", "Gigante", "Troll", "Golem",
+        "Minotauro", "Cerbero", "Ciclope", "Hobbit", "Ent", "Balrog", "Orco", "Goblin", "Spiritello", "Folletto"
+    ]
+    nomi_femminili = [
+        "Fenice", "Sirena", "Strega", "Ninfa", "Driade", "Fata", "Chimera", "Medusa"
+    ]
+    nomi_neutri = ["Licantropo", "Vampiro"]
+
+    genere = random.choice(["maschile", "femminile", "neutro"])
+    
+    if genere == "maschile":
+        aggettivo = random.choice(aggettivi_maschili)
+        nome = random.choice(nomi_maschili + nomi_neutri)
+    elif genere == "femminile":
+        aggettivo = random.choice(aggettivi_femminili)
+        nome = random.choice(nomi_femminili + nomi_neutri)
+    else:
+        aggettivo = random.choice(aggettivi_maschili + aggettivi_femminili)
+        nome = random.choice(nomi_neutri)
+
+    return f"{aggettivo} {nome}"
 
 # Funzioni per l'estrazione di messaggi e sondaggi
 def get_messages(lines):
