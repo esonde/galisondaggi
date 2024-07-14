@@ -344,36 +344,20 @@ function createRankingList(title, data) {
 function createMoodChart(moodData) {
     const ctx = document.getElementById('mood-chart').getContext('2d');
     
-    console.log("Dati ricevuti:", moodData);
-
     const startDate = new Date('2023-12-25');
     const endDate = new Date(); // Oggi
     
     const dates = Object.keys(moodData.daily_moods)
-        .map(dateStr => {
-            const date = new Date(dateStr);
-            console.log("Parsing date:", dateStr, "Result:", date);
-            return date;
-        })
-        .filter(date => {
-            const isValid = !isNaN(date.getTime());
-            if (!isValid) {
-                console.error("Invalid date detected:", date);
-            }
-            return isValid && date >= startDate && date <= endDate;
-        })
+        .map(dateStr => new Date(dateStr))
+        .filter(date => date >= startDate && date <= endDate)
         .sort((a, b) => a - b);
-
-    console.log("Date filtrate e ordinate:", dates);
 
     const emojis = ["☹️", "😕", "😐", "🙂", "😊", "😁"];
     const colors = ["#ff0000", "#ff4500", "#ffa500", "#ffff00", "#7fff00", "#00ff00"];
 
     const averageData = dates.map(date => {
         const dateStr = date.toISOString().split('T')[0];
-        const avgValue = moodData.daily_average[dateStr] || 0;
-        console.log("Media per", dateStr, ":", avgValue);
-        return avgValue;
+        return moodData.daily_average[dateStr] || 0;
     });
     const smoothedAverage = movingAverage(averageData, 14);
 
@@ -383,17 +367,15 @@ function createMoodChart(moodData) {
     const datasets = [
         {
             label: 'Media del benessere',
-            data: smoothedAverage.map((value, index) => {
-                const point = {x: dates[index], y: value};
-                console.log("Punto media:", point);
-                return point;
-            }),
+            data: smoothedAverage.map((value, index) => ({x: dates[index], y: value})),
             type: 'line',
             borderColor: 'black',
             borderWidth: 2,
             fill: false,
             yAxisID: 'y-axis-2',
-            order: 0
+            order: 0,
+            pointRadius: 0, // Rimuove i singoli punti dati
+            tension: 0.4 // Aggiunge una leggera curvatura alla linea per renderla più liscia
         },
         ...emojis.map((emoji, index) => ({
             label: emoji,
@@ -401,11 +383,9 @@ function createMoodChart(moodData) {
                 const dateStr = date.toISOString().split('T')[0];
                 const moodCounts = moodData.daily_moods[dateStr] || {};
                 const total = Object.values(moodCounts).reduce((sum, count) => sum + count, 0);
-                const percentage = total > 0 ? (moodCounts[emoji] || 0) / total * 100 : 0;
-                console.log("Dato per", emoji, "in data", dateStr, ":", percentage);
                 return {
                     x: date,
-                    y: percentage
+                    y: total > 0 ? (moodCounts[emoji] || 0) / total * 100 : 0
                 };
             }),
             backgroundColor: colors[index],
@@ -428,7 +408,7 @@ function createMoodChart(moodData) {
                     time: {
                         unit: 'day',
                         displayFormats: {
-                            day: 'dd MMM yyyy'
+                            day: 'dd MMM'
                         }
                     },
                     title: {
@@ -441,7 +421,6 @@ function createMoodChart(moodData) {
                         maxTicksLimit: 12,
                         callback: function(value, index, values) {
                             const date = new Date(value);
-                            console.log("Tick value:", value, "Parsed date:", date);
                             return date.toLocaleDateString('it-IT', { 
                                 day: 'numeric', 
                                 month: 'short', 
@@ -491,7 +470,6 @@ function createMoodChart(moodData) {
                     callbacks: {
                         title: function(tooltipItems) {
                             const date = new Date(tooltipItems[0].parsed.x);
-                            console.log("Tooltip date:", date);
                             return date.toLocaleDateString('it-IT', { 
                                 day: 'numeric', 
                                 month: 'long', 
@@ -521,7 +499,6 @@ function createMoodChart(moodData) {
         }
     });
 }
-
 function movingAverage(data, windowSize) {
     const result = [];
     for (let i = 0; i < data.length; i++) {
