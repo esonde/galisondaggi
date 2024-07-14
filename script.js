@@ -499,15 +499,25 @@ function createMoodChart(moodData) {
         }
     });
 }
+
+// Funzione per calcolare la media mobile centrata
 function movingAverage(data, windowSize) {
-    const result = [];
-    for (let i = 0; i < data.length; i++) {
-        const windowStart = Math.max(0, i - windowSize + 1);
-        const windowEnd = i + 1;
-        const windowData = data.slice(windowStart, windowEnd);
-        const average = windowData.reduce((sum, value) => sum + value, 0) / windowData.length;
-        result.push(average);
+    if (windowSize % 2 === 0) {
+        windowSize++; // Assicura che la finestra sia dispari per centrare correttamente
     }
+    const result = [];
+    const halfWindow = Math.floor(windowSize / 2);
+
+    for (let i = 0; i < data.length; i++) {
+        let sum = 0;
+        let count = 0;
+        for (let j = Math.max(0, i - halfWindow); j <= Math.min(data.length - 1, i + halfWindow); j++) {
+            sum += data[j];
+            count++;
+        }
+        result.push(sum / count);
+    }
+
     return result;
 }
 
