@@ -67,7 +67,6 @@ function createTimeAnalysisCharts(data) {
 // Crea un singolo grafico
 function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUnit) {
     const canvas = document.getElementById(canvasId);
-    console.log('Canvas for chart:', canvas);
     const ctx = canvas.getContext('2d');
     
     let labels, numPolls, numVotes, avgVotes;
@@ -95,8 +94,6 @@ function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUn
         numVotes = labels.map(hour => votesData[hour]);
         avgVotes = labels.map(hour => avgVotesData[hour]);
     }
-
-    console.log('Creating chart with data:', { labels, numPolls, numVotes, avgVotes });
 
     new Chart(ctx, {
         type: 'bar',
@@ -427,7 +424,6 @@ function createMoodChart(moodData) {
                         callback: function(value, index, values) {
                             const date = new Date(value);
                             return date.toLocaleDateString('it-IT', { 
-                                day: 'numeric', 
                                 month: 'short', 
                                 year: 'numeric' 
                             });

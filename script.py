@@ -18,16 +18,12 @@ def generate_fantasy_name():
         "Eclettica", "Innovativa", "Tenace", "Proattiva", "Carismatica", "Empatica", "Intuitiva", "Pragmatica",
         "Analitica", "Visionaria", "Determinata", "Affidabile", "Sincera", "Ottimista"
     ]
-    nomi_maschili = [
-        "Drago", "Unicorno", "Grifone", "Pegaso", "Mago", "Cavaliere", "Gigante", "Troll", "Golem",
-        "Minotauro", "Cerbero", "Ciclope", "Hobbit", "Ent", "Balrog", "Orco", "Goblin", "Spiritello", "Folletto"
-    ]
-    nomi_femminili = [
-        "Fenice", "Sirena", "Strega", "Ninfa", "Driade", "Fata", "Chimera", "Medusa"
-    ]
-    nomi_neutri = ["Licantropo", "Vampiro"]
+    nomi_maschili = ["Drago", "Unicorno", "Grifone", "Pegaso", "Mago", "Cavaliere", "Gigante", "Troll", "Golem",    "Minotauro", "Cerbero", "Ciclope", "Hobbit", "Ent", "Balrog", "Orco", "Goblin", "Spiritello", "Folletto",    "Fauno", "Centauro", "Satiro", "Mummia", "Vampiro", "Lupo Mannaro", "Yeti", "Basilisco", "Kraken", "Lich",    "Naga", "Roc"]
 
-    genere = random.choice(["maschile", "femminile", "neutro"])
+    nomi_femminili = ["Fenice", "Sirena", "Strega", "Ninfa", "Driade", "Fata", "Chimera", "Medusa",    "Banshee", "Arpia", "Lamia", "Harpia", "Selkie", "Bansidhe", "Succube", "Jinniya"]
+
+
+    genere = random.choice(["maschile", "femminile"])
     
     if genere == "maschile":
         aggettivo = random.choice(aggettivi_maschili)
@@ -35,9 +31,6 @@ def generate_fantasy_name():
     elif genere == "femminile":
         aggettivo = random.choice(aggettivi_femminili)
         nome = random.choice(nomi_femminili + nomi_neutri)
-    else:
-        aggettivo = random.choice(aggettivi_maschili + aggettivi_femminili)
-        nome = random.choice(nomi_neutri)
 
     return f"{aggettivo} {nome}"
 
