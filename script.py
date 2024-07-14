@@ -18,23 +18,24 @@ def generate_fantasy_name():
         "Eclettica", "Innovativa", "Tenace", "Proattiva", "Carismatica", "Empatica", "Intuitiva", "Pragmatica",
         "Analitica", "Visionaria", "Determinata", "Affidabile", "Sincera", "Ottimista"
     ]
-    nomi_maschili = ["Drago", "Unicorno", "Grifone", "Pegaso", "Mago", "Cavaliere", "Gigante", "Troll", "Golem",    "Minotauro", "Cerbero", "Ciclope", "Hobbit", "Ent", "Balrog", "Orco", "Goblin", "Spiritello", "Folletto",    "Fauno", "Centauro", "Satiro", "Mummia", "Vampiro", "Lupo Mannaro", "Yeti", "Basilisco", "Kraken", "Lich",    "Naga", "Roc"]
-
-    nomi_femminili = ["Fenice", "Sirena", "Strega", "Ninfa", "Driade", "Fata", "Chimera", "Medusa",    "Banshee", "Arpia", "Lamia", "Harpia", "Selkie", "Bansidhe", "Succube", "Jinniya"]
-
+    nomi_maschili = ["Drago", "Unicorno", "Grifone", "Pegaso", "Mago", "Cavaliere", "Gigante", "Troll", "Golem", 
+                     "Minotauro", "Cerbero", "Ciclope", "Hobbit", "Ent", "Balrog", "Orco", "Goblin", "Spiritello", "Folletto", 
+                     "Fauno", "Centauro", "Satiro", "Mummia", "Vampiro", "Lupo Mannaro", "Yeti", "Basilisco", "Kraken", "Lich", 
+                     "Naga", "Roc"]
+    nomi_femminili = ["Fenice", "Sirena", "Strega", "Ninfa", "Driade", "Fata", "Chimera", "Medusa", 
+                      "Banshee", "Arpia", "Lamia", "Harpia", "Selkie", "Bansidhe", "Succube", "Jinniya"]
 
     genere = random.choice(["maschile", "femminile"])
     
     if genere == "maschile":
         aggettivo = random.choice(aggettivi_maschili)
-        nome = random.choice(nomi_maschili + nomi_neutri)
+        nome = random.choice(nomi_maschili)
     elif genere == "femminile":
         aggettivo = random.choice(aggettivi_femminili)
-        nome = random.choice(nomi_femminili + nomi_neutri)
+        nome = random.choice(nomi_femminili)
 
     return f"{aggettivo} {nome}"
 
-# Funzioni per l'estrazione di messaggi e sondaggi
 def get_messages(lines):
     data = []
     for line in lines:
@@ -66,7 +67,6 @@ def get_polls(lines):
                 'Options': {}
             }
             
-            # Get the question from the next line
             if i + 1 < len(lines):
                 current_poll['Question'] = lines[i + 1].strip()
         
@@ -79,7 +79,6 @@ def get_polls(lines):
     
     return polls
 
-# Funzioni per caricare e salvare dati JSON
 def load_existing_json(file_path):
     if os.path.exists(file_path):
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -88,7 +87,6 @@ def load_existing_json(file_path):
 
 def save_to_json(data, file_path):
     def json_serial(obj):
-        """JSON serializer for objects not serializable by default json code"""
         if isinstance(obj, datetime):
             return obj.isoformat()
         raise TypeError(f"Type {type(obj)} not serializable")
@@ -96,7 +94,6 @@ def save_to_json(data, file_path):
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4, default=json_serial)
 
-# Funzione per aggiornare i sondaggi
 def update_polls(existing_polls, new_polls):
     updated_polls = {(poll['DateTime'], poll['Author'], poll['Question']): poll for poll in existing_polls}
     added_polls = 0
@@ -105,35 +102,22 @@ def update_polls(existing_polls, new_polls):
     for new_poll in new_polls:
         key = (new_poll['DateTime'], new_poll['Author'], new_poll['Question'])
         if key in updated_polls:
-            # Update the existing poll's options
             updated_polls[key]['Options'].update(new_poll['Options'])
             updated_polls_count += 1
         else:
-            # Add the new poll
             updated_polls[key] = new_poll
             added_polls += 1
     
     return list(updated_polls.values()), added_polls, updated_polls_count
 
-# Funzione per caricare e preparare i sondaggi
+# Modifica la funzione load_polls
 def load_polls(filename):
     global anon_mapping
     with open(filename, 'r', encoding='utf-8') as f:
         polls = json.load(f)
     
-    # Se la lista anon è vuota, anonimizza tutti gli autori
-    if not anon:
-        authors = {poll['Author'] for poll in polls}
-        anon_mapping = {author: generate_fantasy_name() for author in authors}
-    else:
-        anon_mapping = {name: generate_fantasy_name() for name in anon}
-
     for poll in polls:
         poll['DateTime'] = datetime.strptime(poll['DateTime'], '%Y-%m-%d %H:%M:%S')
-        # Anonimizza l'autore se è nella lista
-        if poll['Author'] in anon_mapping:
-            poll['Author'] = anon_mapping[poll['Author']]
-        # Assicurati che i valori delle opzioni siano numerici
         valid_options = {}
         for option, value in poll['Options'].items():
             if isinstance(value, int):
@@ -142,10 +126,14 @@ def load_polls(filename):
                 print(f"Valore non numerico trovato: {option} = {value} nel sondaggio {poll['Question']} dell'autore {poll['Author']}")
         poll['Options'] = valid_options
         poll['TotalVotes'] = sum(valid_options.values())
-    return sorted(polls, key=lambda x: x['DateTime'])  # Ordina i sondaggi per data
+    return sorted(polls, key=lambda x: x['DateTime'])
 
-# Funzione per analizzare i sondaggi
-def analyze_polls(polls):
+# Aggiungi questa nuova funzione per creare l'anon_mapping
+def create_anon_mapping(polls, messages):
+    authors = set(poll['Author'] for poll in polls).union(set(message['Author'] for message in messages))
+    return {author: generate_fantasy_name() for author in authors}
+
+def analyze_polls(polls, messages):
     total_polls = len(polls)
     total_votes = sum(poll['TotalVotes'] for poll in polls)
     avg_votes_per_poll = total_votes / total_polls if total_polls > 0 else 0
@@ -153,66 +141,125 @@ def analyze_polls(polls):
     most_voted_poll = max(polls, key=lambda x: x['TotalVotes'])
     least_voted_poll = min(polls, key=lambda x: x['TotalVotes'])
     
-    days_of_week = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']
-    polls_by_day = {day: 0 for day in days_of_week}
-    votes_by_day = {day: 0 for day in days_of_week}
+    pollsters_stats = defaultdict(lambda: defaultdict(lambda: {
+        'cumulative_polls': 0,
+        'cumulative_votes': 0,
+        'cumulative_messages': 0,
+        'avg_votes_per_poll': 0
+    }))
     
-    polls_by_week = defaultdict(int)
-    votes_by_week = defaultdict(int)
+    weekly_stats = defaultdict(lambda: {
+        'polls': 0,
+        'votes': 0,
+        'messages': 0,
+        'avg_votes_per_poll': 0
+    })
     
-    polls_by_hour = defaultdict(int)
-    votes_by_hour = defaultdict(int)
+    hourly_stats = defaultdict(lambda: {
+        'polls': 0,
+        'votes': 0,
+        'messages': 0,
+        'avg_votes_per_poll': 0
+    })
     
-    pollster_stats = defaultdict(lambda: {'polls': 0, 'votes': 0})
-    weekly_pollster_stats = defaultdict(lambda: defaultdict(lambda: {'cumulative_polls': 0, 'cumulative_votes': 0}))
+    daily_stats = defaultdict(lambda: {
+        'polls': 0,
+        'votes': 0,
+        'messages': 0,
+        'avg_votes_per_poll': 0
+    })
     
-    # Dizionario temporaneo per mantenere le statistiche cumulative di ciascun autore
-    cumulative_stats = defaultdict(lambda: {'cumulative_polls': 0, 'cumulative_votes': 0})
-    
-    for poll in polls:
-        day = days_of_week[poll['DateTime'].weekday()]
-        week = poll['DateTime'].strftime('%Y-%W')
-        hour = poll['DateTime'].hour
-        
-        polls_by_day[day] += 1
-        votes_by_day[day] += poll['TotalVotes']
-        
-        polls_by_week[week] += 1
-        votes_by_week[week] += poll['TotalVotes']
-        
-        polls_by_hour[hour] += 1
-        votes_by_hour[hour] += poll['TotalVotes']
-        
-        pollster_stats[poll['Author']]['polls'] += 1
-        pollster_stats[poll['Author']]['votes'] += poll['TotalVotes']
-        
-        # Aggiorna le statistiche cumulative settimanali per ogni sondaggista
-        cumulative_stats[poll['Author']]['cumulative_polls'] += 1
-        cumulative_stats[poll['Author']]['cumulative_votes'] += poll['TotalVotes']
-        
-        weekly_pollster_stats[week][poll['Author']]['cumulative_polls'] = cumulative_stats[poll['Author']]['cumulative_polls']
-        weekly_pollster_stats[week][poll['Author']]['cumulative_votes'] = cumulative_stats[poll['Author']]['cumulative_votes']
-    
-    # Calcola la media dei voti per ogni giorno, settimana e ora
-    avg_votes_by_day = {day: votes_by_day[day] / polls_by_day[day] if polls_by_day[day] > 0 else 0 for day in days_of_week}
-    avg_votes_by_week = {week: votes_by_week[week] / polls_by_week[week] if polls_by_week[week] > 0 else 0 for week in polls_by_week}
-    avg_votes_by_hour = {hour: votes_by_hour[hour] / polls_by_hour[hour] if polls_by_hour[hour] > 0 else 0 for hour in range(24)}
-    
-    for stats in pollster_stats.values():
-        stats['avg_votes'] = stats['votes'] / stats['polls'] if stats['polls'] > 0 else 0
-    
-    # Calcola la media cumulativa dei voti per ogni sondaggista per settimana
-    for week in weekly_pollster_stats:
-        for author in weekly_pollster_stats[week]:
-            stats = weekly_pollster_stats[week][author]
-            stats['avg_votes_per_poll'] = stats['cumulative_votes'] / stats['cumulative_polls'] if stats['cumulative_polls'] > 0 else 0
-    
-    pollster_rankings = {
-        'by_polls': sorted(pollster_stats.items(), key=lambda x: x[1]['polls'], reverse=True),
-        'by_votes': sorted(pollster_stats.items(), key=lambda x: x[1]['votes'], reverse=True),
-        'by_avg_votes': sorted(pollster_stats.items(), key=lambda x: x[1]['avg_votes'], reverse=True)
+    # Mappa di traduzione per i giorni della settimana
+    day_translation = {
+        'Monday': 'Lunedì',
+        'Tuesday': 'Martedì',
+        'Wednesday': 'Mercoledì',
+        'Thursday': 'Giovedì',
+        'Friday': 'Venerdì',
+        'Saturday': 'Sabato',
+        'Sunday': 'Domenica'
     }
     
+    for poll in polls:
+        week = poll['DateTime'].strftime('%Y-%W')
+        author = poll['Author']
+        hour = poll['DateTime'].hour
+        day = day_translation[poll['DateTime'].strftime('%A')]
+        
+        # Aggiorna pollsters_stats
+        pollsters_stats[week][author]['cumulative_polls'] += 1
+        pollsters_stats[week][author]['cumulative_votes'] += poll['TotalVotes']
+        pollsters_stats[week][author]['avg_votes_per_poll'] = (
+            pollsters_stats[week][author]['cumulative_votes'] / 
+            pollsters_stats[week][author]['cumulative_polls']
+        )
+        
+        # Aggiorna weekly_stats
+        weekly_stats[week]['polls'] += 1
+        weekly_stats[week]['votes'] += poll['TotalVotes']
+        
+        # Aggiorna hourly_stats
+        hourly_stats[hour]['polls'] += 1
+        hourly_stats[hour]['votes'] += poll['TotalVotes']
+        
+        # Aggiorna daily_stats
+        daily_stats[day]['polls'] += 1
+        daily_stats[day]['votes'] += poll['TotalVotes']
+    
+    for message in messages:
+        week = datetime.strptime(message['DateTime'], '%Y-%m-%d %H:%M:%S').strftime('%Y-%W')
+        author = message['Author']
+        hour = datetime.strptime(message['DateTime'], '%Y-%m-%d %H:%M:%S').hour
+        day = day_translation[datetime.strptime(message['DateTime'], '%Y-%m-%d %H:%M:%S').strftime('%A')]
+        
+        pollsters_stats[week][author]['cumulative_messages'] += 1
+        weekly_stats[week]['messages'] += 1
+        hourly_stats[hour]['messages'] += 1
+        daily_stats[day]['messages'] += 1
+    
+    # Calcola avg_votes_per_poll per weekly, hourly e daily stats
+    for week, stats in weekly_stats.items():
+        stats['avg_votes_per_poll'] = stats['votes'] / stats['polls'] if stats['polls'] > 0 else 0
+    
+    for hour, stats in hourly_stats.items():
+        stats['avg_votes_per_poll'] = stats['votes'] / stats['polls'] if stats['polls'] > 0 else 0
+    
+    for day, stats in daily_stats.items():
+        stats['avg_votes_per_poll'] = stats['votes'] / stats['polls'] if stats['polls'] > 0 else 0
+    
+    # Aggiorna le statistiche cumulative per pollsters_stats
+    # Aggiorna le statistiche cumulative per pollsters_stats
+    sorted_weeks = sorted(pollsters_stats.keys())
+    all_authors = set()
+    for week in sorted_weeks:
+        all_authors.update(pollsters_stats[week].keys())
+
+    for i, week in enumerate(sorted_weeks):
+        if i > 0:
+            prev_week = sorted_weeks[i-1]
+            for author in all_authors:
+                if author not in pollsters_stats[week]:
+                    pollsters_stats[week][author] = {
+                        'cumulative_polls': 0,
+                        'cumulative_votes': 0,
+                        'cumulative_messages': 0,
+                        'avg_votes_per_poll': 0
+                    }
+                
+                for stat in ['cumulative_polls', 'cumulative_votes', 'cumulative_messages']:
+                    pollsters_stats[week][author][stat] = (
+                        pollsters_stats[prev_week][author].get(stat, 0) +
+                        pollsters_stats[week][author].get(stat, 0)
+                    )
+                
+                if pollsters_stats[week][author]['cumulative_polls'] > 0:
+                    pollsters_stats[week][author]['avg_votes_per_poll'] = (
+                        pollsters_stats[week][author]['cumulative_votes'] / 
+                        pollsters_stats[week][author]['cumulative_polls']
+                    )
+                else:
+                    pollsters_stats[week][author]['avg_votes_per_poll'] = 0
+
     return {
         'basic_stats': {
             'total_polls': total_polls,
@@ -221,20 +268,12 @@ def analyze_polls(polls):
             'most_voted_poll': most_voted_poll,
             'least_voted_poll': least_voted_poll
         },
-        'polls_by_day': polls_by_day,
-        'votes_by_day': votes_by_day,
-        'avg_votes_by_day': avg_votes_by_day,
-        'polls_by_week': dict(polls_by_week),
-        'votes_by_week': dict(votes_by_week),
-        'avg_votes_by_week': avg_votes_by_week,
-        'polls_by_hour': dict(polls_by_hour),
-        'votes_by_hour': dict(votes_by_hour),
-        'avg_votes_by_hour': avg_votes_by_hour,
-        'weekly_pollster_stats': {week: dict(stats) for week, stats in weekly_pollster_stats.items()},
-        'pollster_rankings': pollster_rankings
+        'pollsters_stats': dict(pollsters_stats),
+        'weekly_stats': dict(weekly_stats),
+        'hourly_stats': dict(hourly_stats),
+        'daily_stats': dict(daily_stats)
     }
 
-# Funzione per trovare sondaggi unanimi
 def find_unanimous_polls(polls):
     unanimous_polls = []
     for poll in polls:
@@ -253,7 +292,6 @@ def find_unanimous_polls(polls):
             })
     return unanimous_polls
 
-# Funzione per analizzare i sondaggi sull'umore giornaliero
 def analyze_day_mood_polls(polls):
     mood_question_pattern = re.compile(r'.* (andata|stata|è) .* (giornata|giorno|oggi)', re.IGNORECASE)
     
@@ -307,27 +345,18 @@ def analyze_day_mood_polls(polls):
 
     return day_mood_polls, daily_moods, daily_average
 
-# Main execution
+# Modifica la parte principale dello script
 if __name__ == "__main__":
-    # Lista di nomi che devono rimanere anonimi (se vuota, tutti gli autori verranno anonimizzati)
-    anon = []
-
-    # Dizionario per mappare i nomi reali a quelli di fantasia
-    anon_mapping = {}
-
-    # Estrai messaggi e sondaggi dal file di chat
     with open("chat.txt", 'r', encoding="UTF-8") as file:
         chat = file.readlines()
 
     messages = get_messages(chat)
     new_polls = get_polls(chat)
 
-    # Aggiorna o crea messages.json
     existing_messages = load_existing_json('messages.json')
     updated_messages = existing_messages + messages
     save_to_json(updated_messages, 'messages.json')
 
-    # Aggiorna o crea polls.json
     existing_polls = load_existing_json('polls.json')
     updated_polls, added_polls_count, updated_polls_count = update_polls(existing_polls, new_polls)
     save_to_json(updated_polls, 'polls.json')
@@ -337,25 +366,32 @@ if __name__ == "__main__":
     print(f"Sondaggi aggiornati: {updated_polls_count}")
     print(f"Totale sondaggi dopo l'aggiornamento: {len(updated_polls)}")
 
-    # Carica i sondaggi aggiornati ed esegui l'analisi
     polls = load_polls('polls.json')
-    results = analyze_polls(polls)
+    
+    # Crea l'anon_mapping considerando sia i sondaggi che i messaggi
+    anon_mapping = create_anon_mapping(polls, updated_messages)
+    
+    # Applica l'anonimizzazione ai sondaggi
+    for poll in polls:
+        poll['Author'] = anon_mapping[poll['Author']]
+    
+    # Applica l'anonimizzazione ai messaggi
+    for message in updated_messages:
+        message['Author'] = anon_mapping[message['Author']]
+    
+    results = analyze_polls(polls, updated_messages)
 
-    # Analizza i sondaggi sull'umore giornaliero
     day_mood_polls, daily_moods, daily_average = analyze_day_mood_polls(polls)
 
-    # Aggiungi i risultati dell'analisi dell'umore giornaliero ai risultati esistenti
     results['day_mood_analysis'] = {
         'day_mood_polls_count': len(day_mood_polls),
         'daily_moods': daily_moods,
         'daily_average': daily_average
     }
 
-    # Salva i risultati dell'analisi
     save_to_json(results, 'analysis_results.json')
     print("Analisi completa. Risultati salvati in 'analysis_results.json'")
 
-    # Trova e salva i sondaggi unanimi
     unanimous_polls = find_unanimous_polls(polls)
     save_to_json(unanimous_polls, 'unanimous_polls.json')
     print(f"Trovati {len(unanimous_polls)} sondaggi unanimi. Salvati in 'unanimous_polls.json'")

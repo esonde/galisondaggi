@@ -7,13 +7,13 @@ function initializePage() {
             createTimeAnalysisCharts(data);
             createPollsterAnalysisCharts(data);
             createRankings(data);
-            createMoodChart(data.day_mood_analysis); // Aggiungi questa riga
+            createMoodChart(data.day_mood_analysis);
+            createLogScatterChart(data.pollsters_stats); // Attiva la funzione per creare il grafico
             setupImageZoom();
         })
         .catch(error => console.error('Errore nel caricamento dei dati:', error));
 }
 
-// Aggiorna la dashboard con le statistiche di base
 function updateDashboard(data) {
     document.querySelector('.stats-container').innerHTML = `
         <div class="stat-box">
@@ -34,7 +34,6 @@ function updateDashboard(data) {
     updatePollBox('least-voted-poll', data.basic_stats.least_voted_poll);
 }
 
-// Aggiorna le box dei sondaggi più e meno votati
 function updatePollBox(elementId, pollData) {
     const pollBox = document.getElementById(elementId);
     const date = new Date(pollData.DateTime);
@@ -57,43 +56,57 @@ function updatePollBox(elementId, pollData) {
     `;
 }
 
-// Crea i grafici per l'analisi temporale
 function createTimeAnalysisCharts(data) {
-    createChart('weekly-chart', 'Analisi Settimanale', data.polls_by_week, data.votes_by_week, data.avg_votes_by_week, 'week');
-    createChart('daily-chart', 'Analisi Giornaliera', data.polls_by_day, data.votes_by_day, data.avg_votes_by_day, 'day');
-    createChart('hourly-chart', 'Analisi Oraria', data.polls_by_hour, data.votes_by_hour, data.avg_votes_by_hour, 'hour');
+    if (data.weekly_stats) createChart('weekly-chart', 'Analisi Settimanale', data.weekly_stats);
+    if (data.daily_stats) createChart('daily-chart', 'Analisi Giornaliera', data.daily_stats);
+    if (data.hourly_stats) createChart('hourly-chart', 'Analisi Oraria', data.hourly_stats);
 }
 
-// Crea un singolo grafico
-function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUnit) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
+function createChart(canvasId, title, statsData) {
+    console.log(`Creating chart: ${canvasId}, Title: ${title}`);
     
-    let labels, numPolls, numVotes, avgVotes;
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+        console.error(`Canvas element with id ${canvasId} not found.`);
+        return;
+    }
 
-    if (timeUnit === 'week') {
-        labels = Object.keys(pollsData).sort();
-        numPolls = labels.map(week => pollsData[week]);
-        numVotes = labels.map(week => votesData[week]);
-        avgVotes = labels.map(week => avgVotesData[week]);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error(`Unable to get context for canvas with id ${canvasId}.`);
+        return;
+    }
+
+    console.log(`Context obtained for canvas: ${canvasId}`);
+
+    let labels, pollsData, votesData, avgVotesData;
+
+    if (canvasId === 'weekly-chart') {
+        labels = Object.keys(statsData).sort();
+        pollsData = labels.map(week => statsData[week]?.polls || 0);
+        votesData = labels.map(week => statsData[week]?.votes || 0);
+        avgVotesData = labels.map(week => statsData[week]?.avg_votes_per_poll || 0);
         
-        // Format labels as "Year Month"
         labels = labels.map(weekString => {
             const date = getDateFromWeek(weekString);
             return date.toLocaleString('it-IT', { year: 'numeric', month: 'long' });
         });
-    } else if (timeUnit === 'day') {
+    } else if (canvasId === 'daily-chart') {
         const daysOrder = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
-        labels = daysOrder;
-        numPolls = daysOrder.map(day => pollsData[day]);
-        numVotes = daysOrder.map(day => votesData[day]);
-        avgVotes = daysOrder.map(day => avgVotesData[day]);
-    } else { // hour
-        labels = Object.keys(pollsData).sort((a, b) => parseInt(a) - parseInt(b));
-        numPolls = labels.map(hour => pollsData[hour]);
-        numVotes = labels.map(hour => votesData[hour]);
-        avgVotes = labels.map(hour => avgVotesData[hour]);
+        labels = daysOrder.map(day => {
+            return day.charAt(0).toUpperCase() + day.slice(1);
+        });
+        pollsData = daysOrder.map(day => statsData[day]?.polls || 0);
+        votesData = daysOrder.map(day => statsData[day]?.votes || 0);
+        avgVotesData = daysOrder.map(day => statsData[day]?.avg_votes_per_poll || 0);
+    } else { // hourly-chart
+        labels = Object.keys(statsData).sort((a, b) => parseInt(a) - parseInt(b));
+        pollsData = labels.map(hour => statsData[hour]?.polls || 0);
+        votesData = labels.map(hour => statsData[hour]?.votes || 0);
+        avgVotesData = labels.map(hour => statsData[hour]?.avg_votes_per_poll || 0);
     }
+
+    console.log(`Data prepared for canvas: ${canvasId}`);
 
     new Chart(ctx, {
         type: 'bar',
@@ -101,14 +114,14 @@ function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUn
             labels: labels,
             datasets: [{
                 label: 'Numero di sondaggi',
-                data: numPolls,
+                data: pollsData,
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
                 yAxisID: 'y-axis-1'
             }, {
                 label: 'Media voti per sondaggio',
-                data: avgVotes,
+                data: avgVotesData,
                 type: 'line',
                 fill: false,
                 borderColor: 'rgba(255, 99, 132, 1)',
@@ -138,8 +151,8 @@ function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUn
                     type: 'category',
                     title: { 
                         display: true, 
-                        text: timeUnit === 'week' ? 'Periodo' : 
-                              timeUnit === 'day' ? 'Giorno della settimana' : 'Ora del giorno'
+                        text: canvasId === 'weekly-chart' ? 'Periodo' : 
+                              canvasId === 'daily-chart' ? 'Giorno della settimana' : 'Ora del giorno'
                     },
                     ticks: {
                         autoSkip: true,
@@ -167,12 +180,130 @@ function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUn
             }
         }
     });
+
+    console.log(`Chart created for canvas: ${canvasId}`);
 }
 
-// Crea i grafici per l'analisi dei sondaggisti
+function createLogScatterChart(pollstersStats) {
+    const canvas = document.getElementById('log-scatter-chart');
+    if (!canvas) {
+        console.error('Canvas element with id log-scatter-chart not found.');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error('Unable to get context for canvas with id log-scatter-chart.');
+        return;
+    }
+
+    console.log('Creating log scatter chart');
+
+    // Estrai l'ultima settimana di dati
+    const lastWeek = Object.keys(pollstersStats).sort().pop();
+    const lastWeekData = pollstersStats[lastWeek];
+
+    // Prepara i dati per il grafico
+    const data = Object.entries(lastWeekData).map(([author, stats]) => ({
+        x: stats.cumulative_polls,
+        y: stats.cumulative_messages,
+        author: author
+    })).filter(d => d.x >= 10 && d.y >= 100);
+
+    // Calcola la retta di regressione (su scala logaritmica)
+    const logData = data.map(d => ({ x: Math.log(d.x), y: Math.log(d.y) }));
+    const { slope, intercept } = calculateLinearRegression(logData);
+
+    // Crea i punti della retta di regressione
+    const regressionLine = data.map(d => ({
+        x: d.x,
+        y: Math.exp(slope * Math.log(d.x) + intercept)
+    })).sort((a, b) => a.x - b.x);
+
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Autori',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                pointRadius: 5,
+            }, {
+                label: 'Retta di regressione',
+                data: regressionLine,
+                type: 'line',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false,
+                pointRadius: 0,
+                tension: 0.1,
+                showLine: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'logarithmic',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Sondaggi totali'
+                    },
+                    min: 10
+                },
+                y: {
+                    type: 'logarithmic',
+                    title: {
+                        display: true,
+                        text: 'Messaggi totali'
+                    },
+                    min: 100
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.raw.author}: (Sondaggi: ${context.raw.x}, Messaggi: ${context.raw.y})`;
+                        }
+                    }
+                },
+                legend: {
+                    display: true
+                },
+                title: {
+                    display: true,
+                    text: 'Messaggi vs Sondaggi per Autore (scala logaritmica)'
+                }
+            },
+            animation: false // Disabilita le animazioni
+        }
+    });
+
+    console.log('Log scatter chart created');
+}
+
+function calculateLinearRegression(data) {
+    const n = data.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    for (let i = 0; i < n; i++) {
+        sumX += data[i].x;
+        sumY += data[i].y;
+        sumXY += data[i].x * data[i].y;
+        sumXX += data[i].x * data[i].x;
+    }
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+    return { slope, intercept };
+}
+
+
+
 function createPollsterAnalysisCharts(data) {
-    createPollsterChart(data.weekly_pollster_stats, 'pollster-num-polls-chart', 'cumulative_polls', 'Numero di sondaggi per sondaggista');
-    createPollsterChart(data.weekly_pollster_stats, 'pollster-total-votes-chart', 'cumulative_votes', 'Numero totale di voti per sondaggista');
+    createPollsterChart(data.pollsters_stats, 'pollster-num-polls-chart', 'cumulative_polls', 'Numero di sondaggi per sondaggista');
+    createPollsterChart(data.pollsters_stats, 'pollster-total-votes-chart', 'cumulative_votes', 'Numero totale di voti per sondaggista');
 }
 
 function getDateFromWeek(weekString) {
@@ -187,14 +318,22 @@ function getDateFromWeek(weekString) {
     return ISOweekStart;
 }
 
-// Funzione per formattare la data
 function formatDate(date) {
     return date.toLocaleString('it-IT', { year: 'numeric', month: 'long' });
 }
 
-// Crea un singolo grafico per l'analisi dei sondaggisti
 function createPollsterChart(data, canvasId, metricKey, title) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+        console.error(`Canvas element with id ${canvasId} not found.`);
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error(`Unable to get context for canvas with id ${canvasId}.`);
+        return;
+    }
 
     const weeks = Object.keys(data).sort();
     const pollsters = new Set();
@@ -218,8 +357,6 @@ function createPollsterChart(data, canvasId, metricKey, title) {
         };
     });
 
-    console.log('Creating pollster chart with data:', datasets);
-
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -235,7 +372,7 @@ function createPollsterChart(data, canvasId, metricKey, title) {
                     font: { size: 18 }
                 },
                 legend: {
-                    display: false // Nascondi la legenda
+                    display: false
                 },
                 tooltip: {
                     mode: 'index',
@@ -255,12 +392,10 @@ function createPollsterChart(data, canvasId, metricKey, title) {
                             return label;
                         },
                         afterBody: function(tooltipItems) {
-                            // Ordina i tooltip items dal più alto al più basso
                             tooltipItems.sort((a, b) => b.parsed.y - a.parsed.y);
                         }
                     },
                     itemSort: function(a, b) {
-                        // Ordina i tooltip items dal più alto al più basso
                         return b.raw.y - a.raw.y;
                     }
                 }
@@ -293,30 +428,33 @@ function createPollsterChart(data, canvasId, metricKey, title) {
         }
     });
 }
-// Genera un colore casuale per i grafici
+
 function getRandomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
-// Crea le classifiche
 function createRankings(data) {
     const container = document.getElementById('rankings-container');
     container.innerHTML = '';
     
+    const lastWeek = Object.keys(data.pollsters_stats).sort().pop();
+    const lastWeekData = data.pollsters_stats[lastWeek];
+    
     const rankings = [
-        { title: 'Top Autori per Sondaggi', data: data.pollster_rankings.by_polls },
-        { title: 'Top Autori per Voti', data: data.pollster_rankings.by_votes },
-        { title: 'Top Autori per Media Voti', data: data.pollster_rankings.by_avg_votes }
+        { title: 'Top Autori per Sondaggi', metric: 'cumulative_polls' },
+        { title: 'Top Autori per Voti', metric: 'cumulative_votes' },
+        { title: 'Top Autori per Media Voti', metric: 'avg_votes_per_poll' }
     ];
     
     rankings.forEach(ranking => {
-        const rankingElement = createRankingList(ranking.title, ranking.data);
+        const sortedData = Object.entries(lastWeekData)
+            .sort((a, b) => b[1][ranking.metric] - a[1][ranking.metric]);
+        const rankingElement = createRankingList(ranking.title, sortedData, ranking.metric);
         container.appendChild(rankingElement);
     });
 }
 
-// Crea una singola lista di classifiche
-function createRankingList(title, data) {
+function createRankingList(title, data, metric) {
     const list = document.createElement('div');
     list.className = 'ranking-list';
     list.innerHTML = `<h3>${title}</h3>`;
@@ -328,19 +466,31 @@ function createRankingList(title, data) {
             <th>Valore</th>
         </tr>
     `;
-    data.forEach(([name, stats], index) => { // Rimuove il slice(0, 10) per mostrare tutti i dati
+    data.forEach(([name, stats], index) => {
         const row = table.insertRow();
         row.insertCell().textContent = index + 1;
         row.insertCell().textContent = name;
-        row.insertCell().textContent = Math.round(title.includes('Media') ? stats.avg_votes : stats[title.includes('Sondaggi') ? 'polls' : 'votes']);
+        row.insertCell().textContent = metric === 'avg_votes_per_poll' 
+            ? stats[metric].toFixed(2) 
+            : Math.round(stats[metric]);
     });
     list.appendChild(table);
     return list;
 }
 
 function createMoodChart(moodData) {
-    const ctx = document.getElementById('mood-chart').getContext('2d');
-    
+    const canvas = document.getElementById('mood-chart');
+    if (!canvas) {
+        console.error('Canvas element with id mood-chart not found.');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error('Unable to get context for canvas with id mood-chart.');
+        return;
+    }
+
     const startDate = new Date('2023-12-21T00:00:00Z');
     const endDate = new Date();
     
@@ -512,7 +662,6 @@ function createMoodChart(moodData) {
     });
 }
 
-// Funzione per calcolare la media mobile centrata
 function movingAverage(data, windowSize) {
     if (windowSize % 2 === 0) {
         windowSize++; // Assicura che la finestra sia dispari per centrare correttamente
@@ -533,7 +682,6 @@ function movingAverage(data, windowSize) {
     return result;
 }
 
-// Configura lo zoom delle immagini
 function setupImageZoom() {
     document.querySelectorAll('img').forEach(img => {
         img.addEventListener('click', () => {

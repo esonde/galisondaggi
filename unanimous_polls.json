@@ -1,53 +1,5 @@
 [
     {
-        "Question": "Hai genitori, nonni o zii di primo grado di cittadinanza (anche) sammarinese?",
-        "Options": {
-            "Sì": 0,
-            "No": 51
-        },
-        "Unanimous Answer": "No"
-    },
-    {
-        "Question": "A proposito di \"Amici immaginari di casa Foster\": qualcuno aveva il gioco per DS? (Suppongo di no ma ora che so che non è stato un mio sogno febbrile e che so come si chiama, tanto vale chiedere)",
-        "Options": {
-            "Si": 0,
-            "No": 26
-        },
-        "Unanimous Answer": "No"
-    },
-    {
-        "Question": "Vogliamo preparare qualche sondaggio bello ignorante per accogliere queste matricole al meglio?",
-        "Options": {
-            "Sì": 23,
-            "No": 0
-        },
-        "Unanimous Answer": "Sì"
-    },
-    {
-        "Question": "Coppelli, pur essendo in questo gruppo, non sa ancora come funziona?",
-        "Options": {
-            "Sì": 29,
-            "No": 0
-        },
-        "Unanimous Answer": "Sì"
-    },
-    {
-        "Question": "Pensi di riuscire a uccidere un'anatra grossa come un cavallo senza nessuna preparazione, che ti attacca di sorpresa?",
-        "Options": {
-            "No": 34,
-            "Sì (sono Slam)": 0
-        },
-        "Unanimous Answer": "No"
-    },
-    {
-        "Question": "Invio di armi in Ucraina",
-        "Options": {
-            "Si": 20,
-            "No": 0
-        },
-        "Unanimous Answer": "Si"
-    },
-    {
         "Question": "Avete visto Creators the past?",
         "Options": {
             "Sì": 0,
@@ -741,14 +693,6 @@
         "Unanimous Answer": "Familiari"
     },
     {
-        "Question": "Scrivi...",
-        "Options": {
-            "Familiari": 32,
-            "Famigliari": 0
-        },
-        "Unanimous Answer": "Familiari"
-    },
-    {
         "Question": "Una bugia che fa star male te ma che serve a non ferire qualcuno a cui vuoi molto bene",
         "Options": {
             "Vale la pena": 28,
@@ -1058,14 +1002,6 @@
         "Unanimous Answer": "Si"
     },
     {
-        "Question": "Va interpretata come una candidatura?",
-        "Options": {
-            "Si": 19,
-            "No": 0
-        },
-        "Unanimous Answer": "Si"
-    },
-    {
         "Question": ".",
         "Options": {
             "_il_ bueno": 42,
@@ -1168,14 +1104,6 @@
             "Dare la stessa quantità a Pan Li": 42
         },
         "Unanimous Answer": "Dare la stessa quantità a Pan Li"
-    },
-    {
-        "Question": ".",
-        "Options": {
-            "il timeline": 0,
-            "la timeline": 44
-        },
-        "Unanimous Answer": "la timeline"
     },
     {
         "Question": ".",

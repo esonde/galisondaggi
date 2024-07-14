@@ -24,7 +24,7 @@
                 <li><a href="#time-analysis">Analisi Temporale</a></li>
                 <li><a href="#pollster-analysis">Analisi Sondaggisti</a></li>
                 <li><a href="#rankings">Classifiche</a></li>
-		<li><a href="#giornata">Giornata</a></li>
+		<li><a href="#altro">Altro</a></li>
             </ul>
         </nav>
     </header>
@@ -86,10 +86,14 @@
             <h2>Classifiche</h2>
             <div id="rankings-container"></div>
         </section>
-	<section id="giornata">
-    	    <h2>Andamento Giornaliero dell'Umore</h2>
-    	    <div class="chart-container">
-                 <canvas id="mood-chart"></canvas>
+        <section id="altro">
+            <h2>Andamento Giornaliero dell'Umore</h2>
+            <div class="chart-container">
+                <canvas id="mood-chart"></canvas>
+            </div>
+            <h2>Dispersione messaggi inviati vs. sondaggi proposti</h2>
+            <div class="chart-container">
+                <canvas id="log-scatter-chart"></canvas>
             </div>
         </section>
     </main>
