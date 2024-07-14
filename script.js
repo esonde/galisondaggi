@@ -74,10 +74,15 @@ function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUn
 
     if (timeUnit === 'week') {
         labels = Object.keys(pollsData).sort();
-        console.log('Weekly Labels:', labels);
         numPolls = labels.map(week => pollsData[week]);
         numVotes = labels.map(week => votesData[week]);
         avgVotes = labels.map(week => avgVotesData[week]);
+        
+        // Format labels as "Year Month"
+        labels = labels.map(weekString => {
+            const date = getDateFromWeek(weekString);
+            return date.toLocaleString('it-IT', { year: 'numeric', month: 'long' });
+        });
     } else if (timeUnit === 'day') {
         const daysOrder = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
         labels = daysOrder;
@@ -134,7 +139,11 @@ function createChart(canvasId, title, pollsData, votesData, avgVotesData, timeUn
             scales: {
                 x: {
                     type: 'category',
-                    title: { display: true, text: 'Settimana' },
+                    title: { 
+                        display: true, 
+                        text: timeUnit === 'week' ? 'Periodo' : 
+                              timeUnit === 'day' ? 'Giorno della settimana' : 'Ora del giorno'
+                    },
                     ticks: {
                         autoSkip: true,
                         maxTicksLimit: 12
@@ -169,6 +178,23 @@ function createPollsterAnalysisCharts(data) {
     createPollsterChart(data.weekly_pollster_stats, 'pollster-total-votes-chart', 'cumulative_votes', 'Numero totale di voti per sondaggista');
 }
 
+function getDateFromWeek(weekString) {
+    const [year, week] = weekString.split('-').map(Number);
+    const simple = new Date(year, 0, 1 + (week - 1) * 7);
+    const dayOfWeek = simple.getDay();
+    const ISOweekStart = simple;
+    if (dayOfWeek <= 4)
+        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    else
+        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    return ISOweekStart;
+}
+
+// Funzione per formattare la data
+function formatDate(date) {
+    return date.toLocaleString('it-IT', { year: 'numeric', month: 'long' });
+}
+
 // Crea un singolo grafico per l'analisi dei sondaggisti
 function createPollsterChart(data, canvasId, metricKey, title) {
     const ctx = document.getElementById(canvasId).getContext('2d');
@@ -179,7 +205,7 @@ function createPollsterChart(data, canvasId, metricKey, title) {
 
     const datasets = Array.from(pollsters).map(pollster => {
         const pollsterData = weeks.map(week => ({
-            x: week,
+            x: getDateFromWeek(week),
             y: data[week][pollster] ? data[week][pollster][metricKey] : null
         }));
 
@@ -200,7 +226,6 @@ function createPollsterChart(data, canvasId, metricKey, title) {
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: weeks,
             datasets: datasets
         },
         options: {
@@ -219,6 +244,9 @@ function createPollsterChart(data, canvasId, metricKey, title) {
                     mode: 'index',
                     intersect: false,
                     callbacks: {
+                        title: function(tooltipItems) {
+                            return formatDate(new Date(tooltipItems[0].parsed.x));
+                        },
                         label: function(context) {
                             let label = context.dataset.label || '';
                             if (label) {
@@ -242,8 +270,14 @@ function createPollsterChart(data, canvasId, metricKey, title) {
             },
             scales: {
                 x: {
-                    type: 'category',
-                    title: { display: true, text: 'Settimana' },
+                    type: 'time',
+                    time: {
+                        unit: 'month',
+                        displayFormats: {
+                            month: 'MMM yyyy'
+                        }
+                    },
+                    title: { display: true, text: 'Periodo' },
                     ticks: {
                         autoSkip: true,
                         maxTicksLimit: 12
@@ -262,7 +296,6 @@ function createPollsterChart(data, canvasId, metricKey, title) {
         }
     });
 }
-
 // Genera un colore casuale per i grafici
 function getRandomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
