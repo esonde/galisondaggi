@@ -1,4 +1,3 @@
-// Funzione per caricare i dati e inizializzare la pagina
 function initializePage() {
     fetch('analysis_results.json')
         .then(response => response.json())
@@ -8,6 +7,7 @@ function initializePage() {
             createTimeAnalysisCharts(data);
             createPollsterAnalysisCharts(data);
             createRankings(data);
+            createMoodChart(data.day_mood_analysis); // Aggiungi questa riga
             setupImageZoom();
         })
         .catch(error => console.error('Errore nel caricamento dei dati:', error));
@@ -339,6 +339,199 @@ function createRankingList(title, data) {
     });
     list.appendChild(table);
     return list;
+}
+
+function createMoodChart(moodData) {
+    const ctx = document.getElementById('mood-chart').getContext('2d');
+    
+    console.log("Dati ricevuti:", moodData);
+
+    const startDate = new Date('2023-12-25');
+    const endDate = new Date(); // Oggi
+    
+    const dates = Object.keys(moodData.daily_moods)
+        .map(dateStr => {
+            const date = new Date(dateStr);
+            console.log("Parsing date:", dateStr, "Result:", date);
+            return date;
+        })
+        .filter(date => {
+            const isValid = !isNaN(date.getTime());
+            if (!isValid) {
+                console.error("Invalid date detected:", date);
+            }
+            return isValid && date >= startDate && date <= endDate;
+        })
+        .sort((a, b) => a - b);
+
+    console.log("Date filtrate e ordinate:", dates);
+
+    const emojis = ["☹️", "😕", "😐", "🙂", "😊", "😁"];
+    const colors = ["#ff0000", "#ff4500", "#ffa500", "#ffff00", "#7fff00", "#00ff00"];
+
+    const averageData = dates.map(date => {
+        const dateStr = date.toISOString().split('T')[0];
+        const avgValue = moodData.daily_average[dateStr] || 0;
+        console.log("Media per", dateStr, ":", avgValue);
+        return avgValue;
+    });
+    const smoothedAverage = movingAverage(averageData, 14);
+
+    const minAvg = Math.min(...smoothedAverage);
+    const maxAvg = Math.max(...smoothedAverage);
+
+    const datasets = [
+        {
+            label: 'Media del benessere',
+            data: smoothedAverage.map((value, index) => {
+                const point = {x: dates[index], y: value};
+                console.log("Punto media:", point);
+                return point;
+            }),
+            type: 'line',
+            borderColor: 'black',
+            borderWidth: 2,
+            fill: false,
+            yAxisID: 'y-axis-2',
+            order: 0
+        },
+        ...emojis.map((emoji, index) => ({
+            label: emoji,
+            data: dates.map(date => {
+                const dateStr = date.toISOString().split('T')[0];
+                const moodCounts = moodData.daily_moods[dateStr] || {};
+                const total = Object.values(moodCounts).reduce((sum, count) => sum + count, 0);
+                const percentage = total > 0 ? (moodCounts[emoji] || 0) / total * 100 : 0;
+                console.log("Dato per", emoji, "in data", dateStr, ":", percentage);
+                return {
+                    x: date,
+                    y: percentage
+                };
+            }),
+            backgroundColor: colors[index],
+            stack: 'Stack 0',
+            order: 1
+        }))
+    ];
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'dd MMM yyyy'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Data'
+                    },
+                    ticks: {
+                        source: 'data',
+                        autoSkip: true,
+                        maxTicksLimit: 12,
+                        callback: function(value, index, values) {
+                            const date = new Date(value);
+                            console.log("Tick value:", value, "Parsed date:", date);
+                            return date.toLocaleDateString('it-IT', { 
+                                day: 'numeric', 
+                                month: 'short', 
+                                year: 'numeric' 
+                            });
+                        }
+                    }
+                },
+                y: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Percentuale di risposte'
+                    },
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                'y-axis-2': {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Media del benessere'
+                    },
+                    min: minAvg - (maxAvg - minAvg) * 0.1,
+                    max: maxAvg + (maxAvg - minAvg) * 0.1,
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Andamento Giornaliero dell\'Umore',
+                    font: { size: 18 }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const date = new Date(tooltipItems[0].parsed.x);
+                            console.log("Tooltip date:", date);
+                            return date.toLocaleDateString('it-IT', { 
+                                day: 'numeric', 
+                                month: 'long', 
+                                year: 'numeric' 
+                            });
+                        },
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toFixed(2) + (context.datasetIndex === 0 ? '' : '%');
+                            }
+                            return label;
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        filter: function(item, chart) {
+                            return item.text !== 'Media del benessere';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function movingAverage(data, windowSize) {
+    const result = [];
+    for (let i = 0; i < data.length; i++) {
+        const windowStart = Math.max(0, i - windowSize + 1);
+        const windowEnd = i + 1;
+        const windowData = data.slice(windowStart, windowEnd);
+        const average = windowData.reduce((sum, value) => sum + value, 0) / windowData.length;
+        result.push(average);
+    }
+    return result;
 }
 
 // Configura lo zoom delle immagini

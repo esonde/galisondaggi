@@ -8,10 +8,10 @@ import os
 # Funzioni per la generazione di nomi di fantasia e l'anonimizzazione
 def generate_fantasy_name():
     aggettivi = [
-        "Fantastico", "Splendido", "Radiante", "Incantevole", "Maestoso", "Misterioso", "Avventuroso", "Eccelso",
-        "Esuberante", "Folgorante", "Luminoso", "Magico", "Miracoloso", "Affascinante", "Grandioso", "Epico",
-        "Leggendario", "Misterico", "Onirico", "Prodigioso", "Sorprendente", "Favoloso", "Divino", "Glorioso",
-        "Incredibile", "Sfavillante", "Esuberante", "Raggiante", "Incantevole", "Straordinario"
+        "Brillante", "Saggio", "Energico", "Creativo", "Vivace", "Intrepido", "Curioso", "Resiliente",
+        "Arguto", "Spiritoso", "Ingegnoso", "Audace", "Perspicace", "Diligente", "Versatile", "Dinamico",
+        "Eclettico", "Innovativo", "Tenace", "Proattivo", "Carismatico", "Empatico", "Intuitivo", "Pragmatico",
+        "Analitico", "Visionario", "Determinato", "Affidabile", "Sincero", "Ottimista"
     ]
     nomi = [
         "Fenice", "Drago", "Unicorno", "Sirena", "Grifone", "Pegaso", "Mago", "Elfo", "Cavaliere", "Strega",
@@ -239,6 +239,60 @@ def find_unanimous_polls(polls):
             })
     return unanimous_polls
 
+# Funzione per analizzare i sondaggi sull'umore giornaliero
+def analyze_day_mood_polls(polls):
+    mood_question_pattern = re.compile(r'.* (andata|stata|è) .* (giornata|giorno|oggi)', re.IGNORECASE)
+    
+    wellbeing_levels = {
+        "😁": {"level": 5, "color": "#00ff00"},
+        "😊": {"level": 4, "color": "#7fff00"},
+        "🙂": {"level": 3, "color": "#ffff00"},
+        "😐": {"level": 2, "color": "#ffa500"},
+        "😕": {"level": 1, "color": "#ff4500"},
+        "☹️": {"level": 0, "color": "#ff0000"}
+    }
+
+    def is_mostly_emoji(text):
+        emoji_pattern = re.compile("["
+            u"\U0001F600-\U0001F64F"
+            u"\U0001F300-\U0001F5FF"
+            u"\U0001F680-\U0001F6FF"
+            u"\U0001F1E0-\U0001F1FF"
+            u"\U00002702-\U000027B0"
+            u"\U000024C2-\U0001F251"
+            "]+", flags=re.UNICODE)
+        
+        emoji_count = len(emoji_pattern.findall(text))
+        return emoji_count > len(text) / 2
+
+    day_mood_polls = []
+    for poll in polls:
+        if mood_question_pattern.search(poll['Question']):
+            emoji_options = sum(1 for option in poll['Options'] if is_mostly_emoji(option))
+            if emoji_options > len(poll['Options']) / 2:
+                day_mood_polls.append(poll)
+
+    daily_moods = {}
+    daily_average = {}
+    for poll in day_mood_polls:
+        date = poll['DateTime'].date()
+        if date not in daily_moods:
+            daily_moods[date.isoformat()] = {emoji: 0 for emoji in wellbeing_levels}
+            daily_average[date.isoformat()] = {"total": 0, "count": 0}
+        for option, votes in poll['Options'].items():
+            if option in wellbeing_levels:
+                daily_moods[date.isoformat()][option] += votes
+                daily_average[date.isoformat()]["total"] += wellbeing_levels[option]["level"] * votes
+                daily_average[date.isoformat()]["count"] += votes
+
+    for date in daily_average:
+        if daily_average[date]["count"] > 0:
+            daily_average[date] = daily_average[date]["total"] / daily_average[date]["count"]
+        else:
+            daily_average[date] = 0
+
+    return day_mood_polls, daily_moods, daily_average
+
 # Main execution
 if __name__ == "__main__":
     # Lista di nomi che devono rimanere anonimi (se vuota, tutti gli autori verranno anonimizzati)
@@ -273,6 +327,16 @@ if __name__ == "__main__":
     polls = load_polls('polls.json')
     results = analyze_polls(polls)
 
+    # Analizza i sondaggi sull'umore giornaliero
+    day_mood_polls, daily_moods, daily_average = analyze_day_mood_polls(polls)
+
+    # Aggiungi i risultati dell'analisi dell'umore giornaliero ai risultati esistenti
+    results['day_mood_analysis'] = {
+        'day_mood_polls_count': len(day_mood_polls),
+        'daily_moods': daily_moods,
+        'daily_average': daily_average
+    }
+
     # Salva i risultati dell'analisi
     save_to_json(results, 'analysis_results.json')
     print("Analisi completa. Risultati salvati in 'analysis_results.json'")
@@ -281,3 +345,5 @@ if __name__ == "__main__":
     unanimous_polls = find_unanimous_polls(polls)
     save_to_json(unanimous_polls, 'unanimous_polls.json')
     print(f"Trovati {len(unanimous_polls)} sondaggi unanimi. Salvati in 'unanimous_polls.json'")
+
+    print(f"Trovati {len(day_mood_polls)} sondaggi sull'umore giornaliero con risposte prevalentemente emoji.")
