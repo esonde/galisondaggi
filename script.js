@@ -344,11 +344,16 @@ function createRankingList(title, data) {
 function createMoodChart(moodData) {
     const ctx = document.getElementById('mood-chart').getContext('2d');
     
-    const startDate = new Date('2023-12-25');
-    const endDate = new Date(); // Oggi
+    const startDate = new Date('2023-12-21T00:00:00Z');
+    const endDate = new Date();
     
+    function parseDate(dateStr) {
+        const [year, month, day] = dateStr.split('-').map(Number);
+        return new Date(Date.UTC(year, month - 1, day));
+    }
+
     const dates = Object.keys(moodData.daily_moods)
-        .map(dateStr => new Date(dateStr))
+        .map(parseDate)
         .filter(date => date >= startDate && date <= endDate)
         .sort((a, b) => a - b);
 
@@ -359,7 +364,7 @@ function createMoodChart(moodData) {
         const dateStr = date.toISOString().split('T')[0];
         return moodData.daily_average[dateStr] || 0;
     });
-    const smoothedAverage = movingAverage(averageData, 14);
+    const smoothedAverage = movingAverage(averageData, 15);
 
     const minAvg = Math.min(...smoothedAverage);
     const maxAvg = Math.max(...smoothedAverage);
@@ -367,15 +372,15 @@ function createMoodChart(moodData) {
     const datasets = [
         {
             label: 'Media del benessere',
-            data: smoothedAverage.map((value, index) => ({x: dates[index], y: value})),
+            data: smoothedAverage.map((value, index) => ({x: dates[index].getTime(), y: value})),
             type: 'line',
             borderColor: 'black',
             borderWidth: 2,
             fill: false,
             yAxisID: 'y-axis-2',
             order: 0,
-            pointRadius: 0, // Rimuove i singoli punti dati
-            tension: 0.4 // Aggiunge una leggera curvatura alla linea per renderla più liscia
+            pointRadius: 0,
+            tension: 0.4
         },
         ...emojis.map((emoji, index) => ({
             label: emoji,
@@ -384,7 +389,7 @@ function createMoodChart(moodData) {
                 const moodCounts = moodData.daily_moods[dateStr] || {};
                 const total = Object.values(moodCounts).reduce((sum, count) => sum + count, 0);
                 return {
-                    x: date,
+                    x: date.getTime(),
                     y: total > 0 ? (moodCounts[emoji] || 0) / total * 100 : 0
                 };
             }),
@@ -408,7 +413,7 @@ function createMoodChart(moodData) {
                     time: {
                         unit: 'day',
                         displayFormats: {
-                            day: 'dd MMM'
+                            day: 'dd MMM yyyy'
                         }
                     },
                     title: {
