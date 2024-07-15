@@ -1,5 +1,232 @@
 [
     {
+        "Question": "quale preferisci",
+        "Options": {
+            "pokepark 1": 9,
+            "pokepark 2": 0
+        },
+        "Unanimous Answer": "pokepark 1"
+    },
+    {
+        "Question": "Trovi più attraenti",
+        "Options": {
+            "Mani": 24,
+            "Piedi": 0
+        },
+        "Unanimous Answer": "Mani"
+    },
+    {
+        "Question": "Vorresti assistere a questa scena",
+        "Options": {
+            "Sì": 27,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "è PEGGIO",
+        "Options": {
+            "Zoofilia": 0,
+            "Incesto": 0,
+            "Necrofilia": 0,
+            "Pedofilia": 25,
+            "Altro (specificare)": 0
+        },
+        "Unanimous Answer": "Pedofilia"
+    },
+    {
+        "Question": "Hai mai avuto la fase loli/monstergirl/boy",
+        "Options": {
+            "No (ho avuto un'adolescenza normale)": 27,
+            "Sì": 0
+        },
+        "Unanimous Answer": "No (ho avuto un'adolescenza normale)"
+    },
+    {
+        "Question": "Conosci la canzone \"La leggenda del Piave\" aka \"Il Piave mormorava\"?",
+        "Options": {
+            "Sì": 27,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "Stai giocando a 60 seconds. Ti mancano 5 secondi e devi decidere se prendere quella troia di Mary Jane o 4 lattine di sugo. Cosa fai",
+        "Options": {
+            "Mary Jane è mia figlia e salvo lei": 0,
+            "Prendo le lattine della Mutti": 12
+        },
+        "Unanimous Answer": "Prendo le lattine della Mutti"
+    },
+    {
+        "Question": "L'autore della mail è",
+        "Options": {
+            "Io": 0,
+            "Il mematore anonimo": 22
+        },
+        "Unanimous Answer": "Il mematore anonimo"
+    },
+    {
+        "Question": "Avete mai sentito la frase \"sono completamente accimurrata?\"",
+        "Options": {
+            "Sì (probabilmente sono terrone)": 0,
+            "No (guessate)": 38
+        },
+        "Unanimous Answer": "No (guessate)"
+    },
+    {
+        "Question": "Supporti l'invasione di terra di Gaza?",
+        "Options": {
+            "Sì": 0,
+            "No": 29
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "Supporti il blocco di energia e beni a gaza?",
+        "Options": {
+            "Sì": 0,
+            "No": 30
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "Sapore cetrioli (🥒,crudi, in insalata) = odore fiori di mimosa",
+        "Options": {
+            "Ci sono": 0,
+            "Non ci arrivo": 22
+        },
+        "Unanimous Answer": "Non ci arrivo"
+    },
+    {
+        "Question": "apprezzavate i video di YouTube fa cagare?",
+        "Options": {
+            "si erano divertenti": 0,
+            "no cringe": 7
+        },
+        "Unanimous Answer": "no cringe"
+    },
+    {
+        "Question": "Scusate ma domanda banalissima ma Assioma di scelta",
+        "Options": {
+            "Pro": 21,
+            "Contro": 0
+        },
+        "Unanimous Answer": "Pro"
+    },
+    {
+        "Question": ".",
+        "Options": {
+            "Bros": 21,
+            "Hoes": 0
+        },
+        "Unanimous Answer": "Bros"
+    },
+    {
+        "Question": "I canto degli alpini sono canzoni fasciste?",
+        "Options": {
+            "Sì": 0,
+            "No": 19
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": ".",
+        "Options": {
+            "Sì": 49,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "Obbligo crocifisso nei luoghi pubblici",
+        "Options": {
+            "Si": 0,
+            "No": 30
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "Credi che Gesù fosse il figlio di dio? (Per i credenti)",
+        "Options": {
+            "Si": 2,
+            "No": 0
+        },
+        "Unanimous Answer": "Si"
+    },
+    {
+        "Question": "Pensi che la musica sia di valore solo se trasmette contenuti?",
+        "Options": {
+            "Sì": 0,
+            "No": 37
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "I parenti che baciano in bocca i bambini piccoli",
+        "Options": {
+            "Sono normali": 0,
+            "Che schifo!": 27
+        },
+        "Unanimous Answer": "Che schifo!"
+    },
+    {
+        "Question": "Se tu ed* tu* migliore amic*/fidanzat* (qualora applicabile) finite in un isola deserta senza cibo. Daresti il permesso all'altro di mangiarti nel caso in cui morissi per primo?",
+        "Options": {
+            "Sì": 44,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "Hai genitori, nonni o zii di primo grado di cittadinanza (anche) sammarinese?",
+        "Options": {
+            "Sì": 0,
+            "No": 51
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "A proposito di \"Amici immaginari di casa Foster\": qualcuno aveva il gioco per DS? (Suppongo di no ma ora che so che non è stato un mio sogno febbrile e che so come si chiama, tanto vale chiedere)",
+        "Options": {
+            "Si": 0,
+            "No": 26
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "Vogliamo preparare qualche sondaggio bello ignorante per accogliere queste matricole al meglio?",
+        "Options": {
+            "Sì": 23,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "Coppelli, pur essendo in questo gruppo, non sa ancora come funziona?",
+        "Options": {
+            "Sì": 29,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "Pensi di riuscire a uccidere un'anatra grossa come un cavallo senza nessuna preparazione, che ti attacca di sorpresa?",
+        "Options": {
+            "No": 34,
+            "Sì (sono Slam)": 0
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "Invio di armi in Ucraina",
+        "Options": {
+            "Si": 20,
+            "No": 0
+        },
+        "Unanimous Answer": "Si"
+    },
+    {
         "Question": "Avete visto Creators the past?",
         "Options": {
             "Sì": 0,
@@ -89,6 +316,14 @@
             "Peggiore": 39
         },
         "Unanimous Answer": "Peggiore"
+    },
+    {
+        "Question": "Consideri l'uso di corde vanilla?",
+        "Options": {
+            "Sì": 0,
+            "No": 32
+        },
+        "Unanimous Answer": "No"
     },
     {
         "Question": "Consideri l'uso di corde vanilla?",

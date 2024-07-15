@@ -108,6 +108,15 @@ function createChart(canvasId, title, statsData) {
 
     console.log(`Data prepared for canvas: ${canvasId}`);
 
+    // Calcola i valori min e max per entrambi gli assi y
+    const maxPolls = Math.max(...pollsData);
+    const minAvgVotes = Math.min(...avgVotesData);
+    const maxAvgVotes = Math.max(...avgVotesData);
+
+    // Aggiungi un po' di padding
+    const pollsPadding = maxPolls * 0.1;
+    const avgVotesPadding = (maxAvgVotes - minAvgVotes) * 0.1;
+
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -164,13 +173,19 @@ function createChart(canvasId, title, statsData) {
                     display: true,
                     position: 'left',
                     title: { display: true, text: 'Numero di sondaggi' },
-                    beginAtZero: true
+                    beginAtZero: true,
+                    max: maxPolls + pollsPadding,
+                    ticks: {
+                        stepSize: Math.ceil((maxPolls + pollsPadding) / 5)
+                    }
                 },
                 'y-axis-2': {
                     type: 'linear',
                     display: true,
                     position: 'right',
                     title: { display: true, text: 'Media voti per sondaggio' },
+                    min: minAvgVotes - avgVotesPadding,
+                    max: maxAvgVotes + avgVotesPadding,
                     grid: { drawOnChartArea: false }
                 }
             },
@@ -183,7 +198,6 @@ function createChart(canvasId, title, statsData) {
 
     console.log(`Chart created for canvas: ${canvasId}`);
 }
-
 function createLogScatterChart(pollstersStats) {
     const canvas = document.getElementById('log-scatter-chart');
     if (!canvas) {

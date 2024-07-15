@@ -4,6 +4,7 @@ from datetime import datetime, date
 from collections import defaultdict
 import random
 import os
+import csv
 
 def generate_fantasy_name():
     aggettivi_maschili = [
@@ -34,7 +35,7 @@ def generate_fantasy_name():
         aggettivo = random.choice(aggettivi_femminili)
         nome = random.choice(nomi_femminili)
 
-    return f"{aggettivo} {nome}"
+    return f"{nome} {aggettivo}"
 
 def determine_date_format(lines):
     dm_count = 0
@@ -61,20 +62,7 @@ def parse_date(date_str, time_str, date_format):
             date_format = date_format[:-2] + '%Y'
             return datetime.strptime(f"{date_str} {time_str}", f"{date_format} %H:%M")
         raise
-
-def get_messages(lines, date_format):
-    data = []
-    for line in lines:
-        match = re.match(r'(\d{1,2}/\d{1,2}/\d{2,4}), (\d{2}:\d{2}) - (.*?): (.*)', line)
-        if match:
-            date, time, author, message = match.groups()
-            try:
-                date_time = parse_date(date, time, date_format)
-                data.append({'DateTime': date_time, 'Author': author, 'Message': message})
-            except ValueError as e:
-                print(f"Errore nel parsing della data: {e} per la linea: {line}")
-    return data
-
+        
 def json_serial(obj):
     if isinstance(obj, datetime):
         return obj.isoformat()
@@ -97,43 +85,6 @@ def save_to_json(data, file_path):
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4, default=json_serial)
     return data
-
-def get_polls(lines, date_format):
-    polls = []
-    current_poll = None
-    
-    for i, line in enumerate(lines):
-        poll_start_match = re.match(r'(\d{1,2}/\d{1,2}/\d{2,4}), (\d{2}:\d{2}) - (.*?): (SONDAGGIO|POLL):', line, re.IGNORECASE)
-        option_match = re.match(r'(OPZIONE|OPTION): (.*) \((.*?)(\d+) vot', line, re.IGNORECASE)
-        
-        if poll_start_match:
-            if current_poll:
-                polls.append(current_poll)
-            
-            date, time, author, _ = poll_start_match.groups()
-            try:
-                date_time = parse_date(date, time, date_format)
-                current_poll = {
-                    'DateTime': date_time,
-                    'Author': author,
-                    'Question': "",
-                    'Options': {}
-                }
-                
-                if i + 1 < len(lines):
-                    current_poll['Question'] = lines[i + 1].strip()
-            except ValueError as e:
-                print(f"Errore nel parsing della data del sondaggio: {e} per la linea: {line}")
-                current_poll = None
-        
-        elif current_poll and option_match:
-            _, option, _, votes = option_match.groups()
-            current_poll['Options'][option] = int(votes)
-    
-    if current_poll:
-        polls.append(current_poll)
-    
-    return polls
 
 def update_polls(existing_polls, new_polls):
     updated_polls = {(poll['DateTime'], poll['Author'], poll['Question']): poll for poll in existing_polls}
@@ -378,15 +329,91 @@ def find_unanimous_polls(polls):
             })
     return unanimous_polls
 
+def create_name_to_phone_mapping(contacts):
+    name_to_phone = {}
+    for contact in contacts:
+        display_name = contact.get('Display Name', '')
+        phone = (contact.get('Mobile Phone') or contact.get('Home Phone') or
+                 contact.get('Business Phone') or '').strip()
+        if display_name and phone:
+            # Rimuovi tutti gli spazi dal numero di telefono
+            phone = ''.join(phone.split())
+            name_to_phone[display_name] = phone
+    return name_to_phone
+
+def get_messages(lines, date_format, name_to_phone):
+    data = []
+    for line in lines:
+        match = re.match(r'(\d{1,2}/\d{1,2}/\d{2,4}), (\d{2}:\d{2}) - (.*?): (.*)', line)
+        if match:
+            date, time, author, message = match.groups()
+            try:
+                date_time = parse_date(date, time, date_format)
+                # Rimuovi gli spazi dall'autore se è un numero di telefono
+                author = ''.join(author.split()) if author.replace('+', '').replace(' ', '').isdigit() else author
+                author = name_to_phone.get(author, author)
+                data.append({'DateTime': date_time, 'Author': author, 'Message': message})
+            except ValueError as e:
+                print(f"Errore nel parsing della data: {e} per la linea: {line}")
+    return data
+
+def get_polls(lines, date_format, name_to_phone):
+    polls = []
+    current_poll = None
+    
+    for i, line in enumerate(lines):
+        poll_start_match = re.match(r'(\d{1,2}/\d{1,2}/\d{2,4}), (\d{2}:\d{2}) - (.*?): (SONDAGGIO|POLL):', line, re.IGNORECASE)
+        option_match = re.match(r'(OPZIONE|OPTION): (.*) \((.*?)(\d+) vot', line, re.IGNORECASE)
+        
+        if poll_start_match:
+            if current_poll:
+                polls.append(current_poll)
+            
+            date, time, author, _ = poll_start_match.groups()
+            try:
+                date_time = parse_date(date, time, date_format)
+                # Rimuovi gli spazi dall'autore se è un numero di telefono
+                author = ''.join(author.split()) if author.replace('+', '').replace(' ', '').isdigit() else author
+                author = name_to_phone.get(author, author)
+                current_poll = {
+                    'DateTime': date_time,
+                    'Author': author,
+                    'Question': "",
+                    'Options': {}
+                }
+                
+                if i + 1 < len(lines):
+                    current_poll['Question'] = lines[i + 1].strip()
+            except ValueError as e:
+                print(f"Errore nel parsing della data del sondaggio: {e} per la linea: {line}")
+                current_poll = None
+        
+        elif current_poll and option_match:
+            _, option, _, votes = option_match.groups()
+            current_poll['Options'][option] = int(votes)
+    
+    if current_poll:
+        polls.append(current_poll)
+    
+    return polls
+
 if __name__ == "__main__":
-    with open("chat.txt", 'r', encoding="UTF-8") as file:
+    # Carica i contatti dal file CSV
+    with open("contacts.csv", 'r', encoding="UTF-8") as file:
+        csv_reader = csv.DictReader(file)
+        contacts = list(csv_reader)
+
+    # Crea il mapping nome-telefono
+    name_to_phone = create_name_to_phone_mapping(contacts)
+
+    with open("chat_2.txt", 'r', encoding="UTF-8") as file:
         chat = file.readlines()
 
     date_format = determine_date_format(chat)
     print(f"Formato data determinato: {date_format}")
 
-    messages = get_messages(chat, date_format)
-    new_polls = get_polls(chat, date_format)
+    messages = get_messages(chat, date_format, name_to_phone)
+    new_polls = get_polls(chat, date_format, name_to_phone)
 
     existing_messages = load_existing_json('messages.json')
     updated_messages = existing_messages + messages

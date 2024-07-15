@@ -1,5 +1,6 @@
 polls.json
 messages.json
-chat.txt
+*.txt
+*.csv
 *.ipynb
 *.ipynb_checkpoints
