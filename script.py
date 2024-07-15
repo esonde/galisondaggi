@@ -1,6 +1,6 @@
 import json
 import re
-from datetime import datetime
+from datetime import datetime, date
 from collections import defaultdict
 import random
 import os
@@ -36,63 +36,104 @@ def generate_fantasy_name():
 
     return f"{aggettivo} {nome}"
 
-def get_messages(lines):
+def determine_date_format(lines):
+    dm_count = 0
+    md_count = 0
+    date_pattern = re.compile(r'(\d{1,2}/\d{1,2}/\d{2,4})')
+    
+    for line in lines:
+        match = date_pattern.search(line)
+        if match:
+            date_str = match.group(1)
+            day, month, year = map(int, date_str.split('/'))
+            if day > 12 and month <= 12:
+                dm_count += 1
+            elif month > 12 and day <= 12:
+                md_count += 1
+    
+    return '%d/%m/%y' if dm_count >= md_count else '%m/%d/%y'
+
+def parse_date(date_str, time_str, date_format):
+    try:
+        return datetime.strptime(f"{date_str} {time_str}", f"{date_format} %H:%M")
+    except ValueError:
+        if date_format.endswith('%y'):
+            date_format = date_format[:-2] + '%Y'
+            return datetime.strptime(f"{date_str} {time_str}", f"{date_format} %H:%M")
+        raise
+
+def get_messages(lines, date_format):
     data = []
     for line in lines:
-        match = re.match(r'(\d{2}/\d{2}/\d{2}), (\d{2}:\d{2}) - (.*?): (.*)', line)
+        match = re.match(r'(\d{1,2}/\d{1,2}/\d{2,4}), (\d{2}:\d{2}) - (.*?): (.*)', line)
         if match:
             date, time, author, message = match.groups()
-            date_time = datetime.strptime(f'{date} {time}', '%d/%m/%y %H:%M')
-            data.append({'DateTime': str(date_time), 'Author': author, 'Message': message})
+            try:
+                date_time = parse_date(date, time, date_format)
+                data.append({'DateTime': date_time, 'Author': author, 'Message': message})
+            except ValueError as e:
+                print(f"Errore nel parsing della data: {e} per la linea: {line}")
     return data
 
-def get_polls(lines):
+def json_serial(obj):
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    raise TypeError(f"Type {type(obj)} not serializable")
+
+def load_existing_json(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        
+        # Converti le date in oggetti datetime
+        for item in data:
+            if 'DateTime' in item and isinstance(item['DateTime'], str):
+                item['DateTime'] = datetime.fromisoformat(item['DateTime'])
+        
+        return data
+    return []
+
+def save_to_json(data, file_path):
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(data, file, ensure_ascii=False, indent=4, default=json_serial)
+    return data
+
+def get_polls(lines, date_format):
     polls = []
     current_poll = None
     
     for i, line in enumerate(lines):
-        poll_start_match = re.match(r'(\d{2}/\d{2}/\d{2}), (\d{2}:\d{2}) - (.*?): SONDAGGIO:', line)
-        option_match = re.match(r'OPZIONE: (.*) \((.*?)(\d+) vot', line)
+        poll_start_match = re.match(r'(\d{1,2}/\d{1,2}/\d{2,4}), (\d{2}:\d{2}) - (.*?): (SONDAGGIO|POLL):', line, re.IGNORECASE)
+        option_match = re.match(r'(OPZIONE|OPTION): (.*) \((.*?)(\d+) vot', line, re.IGNORECASE)
         
         if poll_start_match:
             if current_poll:
                 polls.append(current_poll)
             
-            date, time, author = poll_start_match.groups()
-            date_time = datetime.strptime(f'{date} {time}', '%d/%m/%y %H:%M')
-            current_poll = {
-                'DateTime': str(date_time),
-                'Author': author,
-                'Question': "",
-                'Options': {}
-            }
-            
-            if i + 1 < len(lines):
-                current_poll['Question'] = lines[i + 1].strip()
+            date, time, author, _ = poll_start_match.groups()
+            try:
+                date_time = parse_date(date, time, date_format)
+                current_poll = {
+                    'DateTime': date_time,
+                    'Author': author,
+                    'Question': "",
+                    'Options': {}
+                }
+                
+                if i + 1 < len(lines):
+                    current_poll['Question'] = lines[i + 1].strip()
+            except ValueError as e:
+                print(f"Errore nel parsing della data del sondaggio: {e} per la linea: {line}")
+                current_poll = None
         
         elif current_poll and option_match:
-            option, _, votes = option_match.groups()
+            _, option, _, votes = option_match.groups()
             current_poll['Options'][option] = int(votes)
     
     if current_poll:
         polls.append(current_poll)
     
     return polls
-
-def load_existing_json(file_path):
-    if os.path.exists(file_path):
-        with open(file_path, 'r', encoding='utf-8') as file:
-            return json.load(file)
-    return []
-
-def save_to_json(data, file_path):
-    def json_serial(obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        raise TypeError(f"Type {type(obj)} not serializable")
-
-    with open(file_path, 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4, default=json_serial)
 
 def update_polls(existing_polls, new_polls):
     updated_polls = {(poll['DateTime'], poll['Author'], poll['Question']): poll for poll in existing_polls}
@@ -110,14 +151,12 @@ def update_polls(existing_polls, new_polls):
     
     return list(updated_polls.values()), added_polls, updated_polls_count
 
-# Modifica la funzione load_polls
 def load_polls(filename):
-    global anon_mapping
     with open(filename, 'r', encoding='utf-8') as f:
         polls = json.load(f)
     
     for poll in polls:
-        poll['DateTime'] = datetime.strptime(poll['DateTime'], '%Y-%m-%d %H:%M:%S')
+        poll['DateTime'] = datetime.fromisoformat(poll['DateTime'])
         valid_options = {}
         for option, value in poll['Options'].items():
             if isinstance(value, int):
@@ -128,7 +167,6 @@ def load_polls(filename):
         poll['TotalVotes'] = sum(valid_options.values())
     return sorted(polls, key=lambda x: x['DateTime'])
 
-# Aggiungi questa nuova funzione per creare l'anon_mapping
 def create_anon_mapping(polls, messages):
     authors = set(poll['Author'] for poll in polls).union(set(message['Author'] for message in messages))
     return {author: generate_fantasy_name() for author in authors}
@@ -169,7 +207,6 @@ def analyze_polls(polls, messages):
         'avg_votes_per_poll': 0
     })
     
-    # Mappa di traduzione per i giorni della settimana
     day_translation = {
         'Monday': 'Lunedì',
         'Tuesday': 'Martedì',
@@ -186,7 +223,6 @@ def analyze_polls(polls, messages):
         hour = poll['DateTime'].hour
         day = day_translation[poll['DateTime'].strftime('%A')]
         
-        # Aggiorna pollsters_stats
         pollsters_stats[week][author]['cumulative_polls'] += 1
         pollsters_stats[week][author]['cumulative_votes'] += poll['TotalVotes']
         pollsters_stats[week][author]['avg_votes_per_poll'] = (
@@ -194,30 +230,26 @@ def analyze_polls(polls, messages):
             pollsters_stats[week][author]['cumulative_polls']
         )
         
-        # Aggiorna weekly_stats
         weekly_stats[week]['polls'] += 1
         weekly_stats[week]['votes'] += poll['TotalVotes']
         
-        # Aggiorna hourly_stats
         hourly_stats[hour]['polls'] += 1
         hourly_stats[hour]['votes'] += poll['TotalVotes']
         
-        # Aggiorna daily_stats
         daily_stats[day]['polls'] += 1
         daily_stats[day]['votes'] += poll['TotalVotes']
     
     for message in messages:
-        week = datetime.strptime(message['DateTime'], '%Y-%m-%d %H:%M:%S').strftime('%Y-%W')
+        week = message['DateTime'].strftime('%Y-%W')
         author = message['Author']
-        hour = datetime.strptime(message['DateTime'], '%Y-%m-%d %H:%M:%S').hour
-        day = day_translation[datetime.strptime(message['DateTime'], '%Y-%m-%d %H:%M:%S').strftime('%A')]
+        hour = message['DateTime'].hour
+        day = day_translation[message['DateTime'].strftime('%A')]
         
         pollsters_stats[week][author]['cumulative_messages'] += 1
         weekly_stats[week]['messages'] += 1
         hourly_stats[hour]['messages'] += 1
         daily_stats[day]['messages'] += 1
     
-    # Calcola avg_votes_per_poll per weekly, hourly e daily stats
     for week, stats in weekly_stats.items():
         stats['avg_votes_per_poll'] = stats['votes'] / stats['polls'] if stats['polls'] > 0 else 0
     
@@ -227,8 +259,6 @@ def analyze_polls(polls, messages):
     for day, stats in daily_stats.items():
         stats['avg_votes_per_poll'] = stats['votes'] / stats['polls'] if stats['polls'] > 0 else 0
     
-    # Aggiorna le statistiche cumulative per pollsters_stats
-    # Aggiorna le statistiche cumulative per pollsters_stats
     sorted_weeks = sorted(pollsters_stats.keys())
     all_authors = set()
     for week in sorted_weeks:
@@ -274,6 +304,62 @@ def analyze_polls(polls, messages):
         'daily_stats': dict(daily_stats)
     }
 
+def analyze_day_mood_polls(polls):
+    mood_question_pattern = re.compile(r'.* (andata|stata|è|was|been) .* (giornata|giorno|oggi|day|today)', re.IGNORECASE)
+    
+    wellbeing_levels = {
+        "😄": {"level": 6, "color": "#00ff00"},
+        "😊": {"level": 5, "color": "#7fff00"},
+        "🙂": {"level": 4, "color": "#ffff00"},
+        "😐": {"level": 3, "color": "#ffa500"},
+        "😕": {"level": 2, "color": "#ff8c00"},
+        "☹️": {"level": 1, "color": "#ff4500"},
+        "😣": {"level": 0, "color": "#ff0000"}
+    }
+
+    def is_mostly_emoji(text):
+        emoji_pattern = re.compile("["
+            u"\U0001F600-\U0001F64F"
+            u"\U0001F300-\U0001F5FF"
+            u"\U0001F680-\U0001F6FF"
+            u"\U0001F1E0-\U0001F1FF"
+            u"\U00002702-\U000027B0"
+            u"\U000024C2-\U0001F251"
+            "]+", flags=re.UNICODE)
+        
+        emoji_count = len(emoji_pattern.findall(text))
+        return emoji_count > 0 and emoji_count >= len(text.strip()) / 2
+
+    day_mood_polls = []
+    for poll in polls:
+        if mood_question_pattern.search(poll['Question']):
+            emoji_options = sum(1 for option in poll['Options'] if is_mostly_emoji(option))
+            if emoji_options > len(poll['Options']) / 2:
+                day_mood_polls.append(poll)
+
+    daily_moods = {}
+    daily_average = {}
+    for poll in day_mood_polls:
+        poll_date = poll['DateTime'].date()
+        date_str = poll_date.isoformat()  # Convertiamo la data in stringa
+        if date_str not in daily_moods:
+            daily_moods[date_str] = {emoji: 0 for emoji in wellbeing_levels}
+            daily_average[date_str] = {"total": 0, "count": 0}
+        for option, votes in poll['Options'].items():
+            emoji = next((e for e in wellbeing_levels if e in option), None)
+            if emoji:
+                daily_moods[date_str][emoji] += votes
+                daily_average[date_str]["total"] += wellbeing_levels[emoji]["level"] * votes
+                daily_average[date_str]["count"] += votes
+
+    for date_str in daily_average:
+        if daily_average[date_str]["count"] > 0:
+            daily_average[date_str] = daily_average[date_str]["total"] / daily_average[date_str]["count"]
+        else:
+            daily_average[date_str] = 0
+
+    return day_mood_polls, daily_moods, daily_average
+
 def find_unanimous_polls(polls):
     unanimous_polls = []
     for poll in polls:
@@ -292,66 +378,15 @@ def find_unanimous_polls(polls):
             })
     return unanimous_polls
 
-def analyze_day_mood_polls(polls):
-    mood_question_pattern = re.compile(r'.* (andata|stata|è) .* (giornata|giorno|oggi)', re.IGNORECASE)
-    
-    wellbeing_levels = {
-        "😁": {"level": 5, "color": "#00ff00"},
-        "😊": {"level": 4, "color": "#7fff00"},
-        "🙂": {"level": 3, "color": "#ffff00"},
-        "😐": {"level": 2, "color": "#ffa500"},
-        "😕": {"level": 1, "color": "#ff4500"},
-        "☹️": {"level": 0, "color": "#ff0000"}
-    }
-
-    def is_mostly_emoji(text):
-        emoji_pattern = re.compile("["
-            u"\U0001F600-\U0001F64F"
-            u"\U0001F300-\U0001F5FF"
-            u"\U0001F680-\U0001F6FF"
-            u"\U0001F1E0-\U0001F1FF"
-            u"\U00002702-\U000027B0"
-            u"\U000024C2-\U0001F251"
-            "]+", flags=re.UNICODE)
-        
-        emoji_count = len(emoji_pattern.findall(text))
-        return emoji_count > len(text) / 2
-
-    day_mood_polls = []
-    for poll in polls:
-        if mood_question_pattern.search(poll['Question']):
-            emoji_options = sum(1 for option in poll['Options'] if is_mostly_emoji(option))
-            if emoji_options > len(poll['Options']) / 2:
-                day_mood_polls.append(poll)
-
-    daily_moods = {}
-    daily_average = {}
-    for poll in day_mood_polls:
-        date = poll['DateTime'].date()
-        if date not in daily_moods:
-            daily_moods[date.isoformat()] = {emoji: 0 for emoji in wellbeing_levels}
-            daily_average[date.isoformat()] = {"total": 0, "count": 0}
-        for option, votes in poll['Options'].items():
-            if option in wellbeing_levels:
-                daily_moods[date.isoformat()][option] += votes
-                daily_average[date.isoformat()]["total"] += wellbeing_levels[option]["level"] * votes
-                daily_average[date.isoformat()]["count"] += votes
-
-    for date in daily_average:
-        if daily_average[date]["count"] > 0:
-            daily_average[date] = daily_average[date]["total"] / daily_average[date]["count"]
-        else:
-            daily_average[date] = 0
-
-    return day_mood_polls, daily_moods, daily_average
-
-# Modifica la parte principale dello script
 if __name__ == "__main__":
     with open("chat.txt", 'r', encoding="UTF-8") as file:
         chat = file.readlines()
 
-    messages = get_messages(chat)
-    new_polls = get_polls(chat)
+    date_format = determine_date_format(chat)
+    print(f"Formato data determinato: {date_format}")
+
+    messages = get_messages(chat, date_format)
+    new_polls = get_polls(chat, date_format)
 
     existing_messages = load_existing_json('messages.json')
     updated_messages = existing_messages + messages
@@ -368,14 +403,11 @@ if __name__ == "__main__":
 
     polls = load_polls('polls.json')
     
-    # Crea l'anon_mapping considerando sia i sondaggi che i messaggi
     anon_mapping = create_anon_mapping(polls, updated_messages)
     
-    # Applica l'anonimizzazione ai sondaggi
     for poll in polls:
         poll['Author'] = anon_mapping[poll['Author']]
     
-    # Applica l'anonimizzazione ai messaggi
     for message in updated_messages:
         message['Author'] = anon_mapping[message['Author']]
     

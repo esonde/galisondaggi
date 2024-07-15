@@ -491,7 +491,7 @@ function createMoodChart(moodData) {
         return;
     }
 
-    const startDate = new Date('2023-12-21T00:00:00Z');
+    const startDate = new Date('2024-01-01T00:00:01Z');
     const endDate = new Date();
     
     function parseDate(dateStr) {
@@ -559,25 +559,25 @@ function createMoodChart(moodData) {
                     type: 'time',
                     time: {
                         unit: 'day',
-                        displayFormats: {
-                            day: 'dd MMM yyyy'
-                        }
                     },
                     title: {
-                        display: true,
-                        text: 'Data'
+                        display: false,
                     },
                     ticks: {
                         source: 'data',
-                        autoSkip: true,
-                        maxTicksLimit: 12,
+                        autoSkip: false,
+                        maxRotation: 0,
+                        align: 'start',
                         callback: function(value, index, values) {
                             const date = new Date(value);
-                            return date.toLocaleDateString('it-IT', { 
-                                month: 'short', 
-                                year: 'numeric' 
-                            });
+                            if (date.getUTCDate() === 1 || index === 0) {
+                                return date.toLocaleDateString('it-IT', { month: 'short' });
+                            }
+                            return '';
                         }
+                    },
+                    grid: {
+                        display: false,
                     }
                 },
                 y: {
@@ -661,7 +661,6 @@ function createMoodChart(moodData) {
         }
     });
 }
-
 function movingAverage(data, windowSize) {
     if (windowSize % 2 === 0) {
         windowSize++; // Assicura che la finestra sia dispari per centrare correttamente
