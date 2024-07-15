@@ -406,7 +406,7 @@ if __name__ == "__main__":
     # Crea il mapping nome-telefono
     name_to_phone = create_name_to_phone_mapping(contacts)
 
-    with open("chat_2.txt", 'r', encoding="UTF-8") as file:
+    with open("chat_1.txt", 'r', encoding="UTF-8") as file:
         chat = file.readlines()
 
     date_format = determine_date_format(chat)
