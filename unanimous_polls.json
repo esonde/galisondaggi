@@ -1708,8 +1708,40 @@
         "Options": {
             "D'ora in poi mi chiamerai Lele": 0,
             "Mi chiami già Lele": 0,
-            "Chittesencula": 17
+            "Chittesencula": 18
         },
         "Unanimous Answer": "Chittesencula"
+    },
+    {
+        "Question": ".",
+        "Options": {
+            "Sus": 35,
+            "Not sus": 0
+        },
+        "Unanimous Answer": "Sus"
+    },
+    {
+        "Question": "RFK ha volontariamente leakato il video della sua chiamata con Trump dopo il tentato omicidio?",
+        "Options": {
+            "Sì": 4,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "Ursula bis",
+        "Options": {
+            "Lago Duria": 10,
+            "Lago Nia": 0
+        },
+        "Unanimous Answer": "Lago Duria"
+    },
+    {
+        "Question": "Se dovessi votare per il presidente degli USA, voteresti",
+        "Options": {
+            "Il dem Ferruccio": 9,
+            "Il rep Paolo": 0
+        },
+        "Unanimous Answer": "Il dem Ferruccio"
     }
 ]
