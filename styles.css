@@ -503,3 +503,30 @@ h2 {
 #submit-btn:hover {
     background-color: #357abd;
 }
+
+
+#galitw-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.newspaper-page {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.newspaper-page h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.newspaper-page p {
+    margin: 0.5rem 0 0;
+    color: #666;
+}
+

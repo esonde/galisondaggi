@@ -12,6 +12,23 @@ function initializePage() {
             setupImageZoom();
         })
         .catch(error => console.error('Errore nel caricamento dei dati:', error));
+
+    // Carica i dati dal file galiweekly.json
+    fetch('galiweekly.json')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('galiweekly-container');
+            data.forEach(page => {
+                const pageElement = document.createElement('div');
+                pageElement.className = 'newspaper-page';
+                pageElement.innerHTML = `
+                    <h3>${page.date}</h3>
+                    <div>${marked.parse(page.content)}</div>
+                `;
+                container.appendChild(pageElement);
+            });
+        })
+        .catch(error => console.error('Error loading GaliWeekly data:', error));
 }
 
 function updateDashboard(data) {
@@ -687,10 +704,6 @@ function createMoodChart(moodData) {
         }
     });
 }
-
-
-
-
 
 function movingAverage(data, windowSize) {
     if (windowSize % 2 === 0) {

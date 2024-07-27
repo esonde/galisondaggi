@@ -9,6 +9,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <header>
@@ -24,7 +25,8 @@
                 <li><a href="#time-analysis">Analisi Temporale</a></li>
                 <li><a href="#pollster-analysis">Analisi Sondaggisti</a></li>
                 <li><a href="#rankings">Classifiche</a></li>
-		<li><a href="#altro">Altro</a></li>
+        		<li><a href="#galiweekly">GaliWeekly</a></li> <!-- Nuova scheda aggiunta qui -->
+				<li><a href="#altro">Altro</a></li>
             </ul>
         </nav>
     </header>
@@ -86,6 +88,10 @@
             <h2>Classifiche</h2>
             <div id="rankings-container"></div>
         </section>
+		<section id="galiweekly">
+        	<h2>GaliWeekly</h2>
+        	<div id="galiweekly-container"></div>
+    	</section>
         <section id="altro">
             <h2>Andamento Giornaliero dell'Umore</h2>
             <div id="mood-chart-container" class="chart-container">
