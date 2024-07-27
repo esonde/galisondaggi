@@ -518,8 +518,9 @@ function createMoodChart(moodData) {
         .filter(date => date >= startDate && date <= endDate)
         .sort((a, b) => a - b);
 
-    const emojis = ["☹️", "😕", "😐", "🙂", "😊", "😁"];
-    const colors = ["#ff0000", "#ff4500", "#ffa500", "#ffff00", "#7fff00", "#00ff00"];
+    // Emoji e colori aggiornati
+    const emojis = ["😣", "☹️", "🙁", "😕", "😐", "🙂🙃", "🙂", "😊", "😁", "😄"];
+    const colors = ["#D92727", "#D92727", "#FF8C3A", "#FFD03B", "#FFF06B", "#F2E388", "#D6FF7F", "#9EFF2C", "#0C9B0A", "#0C9B0A"];
 
     const averageData = dates.map(date => {
         const dateStr = date.toISOString().split('T')[0];
@@ -529,6 +530,7 @@ function createMoodChart(moodData) {
 
     const minAvg = Math.min(...smoothedAverage);
     const maxAvg = Math.max(...smoothedAverage);
+    const padding = 0.04; // padding fisso di 0.04 sopra e sotto
 
     const datasets = [
         {
@@ -549,9 +551,15 @@ function createMoodChart(moodData) {
                 const dateStr = date.toISOString().split('T')[0];
                 const moodCounts = moodData.daily_moods[dateStr] || {};
                 const total = Object.values(moodCounts).reduce((sum, count) => sum + count, 0);
+                let count = 0;
+                if (emoji === "🙂🙃") {
+                    count = (moodCounts["🙂🙃"] || 0) + (moodCounts["🙃🙂"] || 0);
+                } else {
+                    count = moodCounts[emoji] || 0;
+                }
                 return {
                     x: date.getTime(),
-                    y: total > 0 ? (moodCounts[emoji] || 0) / total * 100 : 0
+                    y: total > 0 ? count / total * 100 : 0
                 };
             }),
             backgroundColor: colors[index],
@@ -616,8 +624,8 @@ function createMoodChart(moodData) {
                         display: true,
                         text: 'Media del benessere'
                     },
-                    min: minAvg - (maxAvg - minAvg) * 0.1,
-                    max: maxAvg + (maxAvg - minAvg) * 0.1,
+                    min: Math.max(-3, minAvg - padding),
+                    max: Math.min(3, maxAvg + padding),
                     grid: {
                         drawOnChartArea: false
                     }
@@ -645,36 +653,45 @@ function createMoodChart(moodData) {
                             if (context.datasetIndex === 0) {
                                 return `Media del benessere: ${context.parsed.y.toFixed(2)}`;
                             }
-                            return null;  // Ritorna null per gli altri dataset, li gestiremo in afterBody
+                            return null; // Ritorniamo null qui per gestire le faccine in afterBody
                         },
                         afterBody: function(tooltipItems) {
-                            const date = new Date(tooltipItems[0].parsed.x);
-                            const dateStr = date.toISOString().split('T')[0];
-                            const moodCounts = moodData.daily_moods[dateStr] || {};
-                            const total = Object.values(moodCounts).reduce((sum, count) => sum + count, 0);
-
-                            // Calcola le percentuali e ordina le opzioni
-                            const sortedOptions = Object.entries(moodCounts)
-                                .map(([emoji, count]) => ({
-                                    emoji,
+                            const dateStr = new Date(tooltipItems[0].parsed.x).toISOString().split('T')[0];
+                            const dailyMoods = moodData.daily_moods[dateStr] || {};
+                            const total = Object.values(dailyMoods).reduce((sum, count) => sum + count, 0);
+                            
+                            const moodDataForDay = emojis.map(emoji => {
+                                let count = 0;
+                                if (emoji === "🙂🙃") {
+                                    count = (dailyMoods["🙂🙃"] || 0) + (dailyMoods["🙃🙂"] || 0);
+                                } else {
+                                    count = dailyMoods[emoji] || 0;
+                                }
+                                return {
+                                    emoji: emoji,
                                     percentage: total > 0 ? (count / total * 100) : 0
-                                }))
-                                .sort((a, b) => b.percentage - a.percentage);
+                                };
+                            }).filter(item => item.percentage > 0)
+                              .sort((a, b) => b.percentage - a.percentage);
 
-                            // Crea le stringhe per il tooltip
-                            return sortedOptions.map(option => 
-                                `${option.emoji}: ${option.percentage.toFixed(2)}%`
+                            return moodDataForDay.map(item => 
+                                `${item.emoji}: ${item.percentage.toFixed(2)}%`
                             );
                         }
                     }
                 },
                 legend: {
-                    display: false  // Rimuove la legenda
+                    display: false // Rimuove la legenda
                 }
             }
         }
     });
 }
+
+
+
+
+
 function movingAverage(data, windowSize) {
     if (windowSize % 2 === 0) {
         windowSize++; // Assicura che la finestra sia dispari per centrare correttamente

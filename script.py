@@ -264,6 +264,7 @@ def analyze_day_mood_polls(polls):
         "😊": {"level": 2, "color": "#7fff00"},
         "🙂": {"level": 1, "color": "#ffff00"},
         "😐": {"level": 0, "color": "#ffa500"},
+        "🙂🙃": {"level": 0, "color": "#ffa500"},  # Aggiunto "così così"
         "😕": {"level": -1, "color": "#ff8c00"},
         "🙁": {"level": -2, "color": "#ff4500"},
         "☹️": {"level": -3, "color": "#ff0000"},
@@ -283,35 +284,40 @@ def analyze_day_mood_polls(polls):
         emoji_count = len(emoji_pattern.findall(text))
         return emoji_count > 0
 
-    day_mood_polls = []
-    for poll in polls:
-        if mood_question_pattern.search(poll['Question']):
-            emoji_options = sum(1 for option in poll['Options'] if is_mostly_emoji(option))
-            if emoji_options > len(poll['Options']) / 2:
-                day_mood_polls.append(poll)
+    def get_emoji_from_option(option):
+        for emoji in wellbeing_levels:
+            if emoji in option:
+                return emoji
+        return None
+
+    day_mood_polls = [
+        poll for poll in polls
+        if mood_question_pattern.search(poll['Question']) and
+        sum(1 for option in poll['Options'] if is_mostly_emoji(option)) > len(poll['Options']) / 2
+    ]
 
     daily_moods = {}
     daily_average = {}
+
     for poll in day_mood_polls:
         poll_date = poll['DateTime'].date()
         date_str = poll_date.isoformat()
+        
         if date_str not in daily_moods:
             daily_moods[date_str] = {emoji: 0 for emoji in wellbeing_levels}
             daily_average[date_str] = {"total": 0, "count": 0}
         
         for option, votes in poll['Options'].items():
-            if "🙂🙃" in option or "🙃🙂" in option:
-                # Caso speciale per "così così"
-                daily_moods[date_str]["😐"] += votes  # Usiamo l'emoji neutro per contare
+            emoji = get_emoji_from_option(option)
+            if emoji:
+                daily_moods[date_str][emoji] += votes
+                level = wellbeing_levels[emoji]["level"]
+                daily_average[date_str]["total"] += level * votes
+                daily_average[date_str]["count"] += votes
+            elif "🙂🙃" in option or "🙃🙂" in option:
+                daily_moods[date_str]["🙂🙃"] += votes
                 daily_average[date_str]["total"] += 0  # Valore 0 per "così così"
                 daily_average[date_str]["count"] += votes
-            else:
-                emojis = [e for e in wellbeing_levels if e in option]
-                if emojis:
-                    level = sum(wellbeing_levels[e]["level"] for e in emojis) / len(emojis)
-                    daily_moods[date_str][emojis[0]] += votes  # Usiamo il primo emoji per contare
-                    daily_average[date_str]["total"] += level * votes
-                    daily_average[date_str]["count"] += votes
 
     for date_str in daily_average:
         if daily_average[date_str]["count"] > 0:

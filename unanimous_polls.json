@@ -1731,17 +1731,57 @@
     {
         "Question": "Ursula bis",
         "Options": {
-            "Lago Duria": 10,
+            "Lago Duria": 11,
             "Lago Nia": 0
         },
         "Unanimous Answer": "Lago Duria"
     },
     {
-        "Question": "Se dovessi votare per il presidente degli USA, voteresti",
+        "Question": "Spenderesti mai 90€ per il concerto di un rapper in playback?",
         "Options": {
-            "Il dem Ferruccio": 9,
-            "Il rep Paolo": 0
+            "Si": 0,
+            "No": 32
         },
-        "Unanimous Answer": "Il dem Ferruccio"
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "il baffo ha chiesto anche ai maschiucci se sono dei bravi casalinghi?",
+        "Options": {
+            "sì": 0,
+            "no: è ovvio che lo siano!": 20
+        },
+        "Unanimous Answer": "no: è ovvio che lo siano!"
+    },
+    {
+        "Question": "E la stessa domanda estesa a tutte le persone di quell'età anche non universitari?",
+        "Options": {
+            "Vita insieme ad un partner": 22,
+            "Viaggi per l'Europa": 0
+        },
+        "Unanimous Answer": "Vita insieme ad un partner"
+    },
+    {
+        "Question": "Stai capendo qualcosa di quello che sta succedendo da 20 minuti a questa parte?",
+        "Options": {
+            "Sì": 0,
+            "No": 14
+        },
+        "Unanimous Answer": "No"
+    },
+    {
+        "Question": "festival (con un paio di artisti su una decina che ti piacciono)>concerti singoli",
+        "Options": {
+            "📠": 0,
+            "🧢": 8
+        },
+        "Unanimous Answer": "🧢"
+    },
+    {
+        "Question": "In pieno spirito olimpico, è più uno sport",
+        "Options": {
+            "Break dance": 0,
+            "Cricket": 9
+        },
+        "Unanimous Answer": "Cricket"
     }
 ]
