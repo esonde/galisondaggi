@@ -110,6 +110,7 @@ section {
     padding: 1rem;
     margin-bottom: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
 }
 
 section.active {
@@ -254,14 +255,14 @@ h2 {
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     box-sizing: border-box;
-    display: flex; /* Aggiungi questa linea */
-    justify-content: center; /* Aggiungi questa linea */
-    align-items: center; /* Aggiungi questa linea */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .chart-container canvas {
-    width: 100% !important; /* Aggiungi questa linea */
-    height: 100% !important; /* Aggiungi questa linea */
+    width: 100% !important;
+    height: 100% !important;
 }
 
 #rankings-container {
@@ -467,7 +468,6 @@ h2 {
     }
 }
 
-
 /* Aggiungi questi stili al tuo file CSS esistente */
 
 .quiz-container {
@@ -504,11 +504,13 @@ h2 {
     background-color: #357abd;
 }
 
-
 #galitw-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    width: 100%; /* Assicurati che il contenitore occupi il 100% della larghezza disponibile */
+    box-sizing: border-box; /* Include padding e border nella larghezza totale */
+    padding: 1rem; /* Aggiungi padding per evitare che sbordi */
 }
 
 .newspaper-page {
@@ -517,7 +519,8 @@ h2 {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 1rem;
-    width: 100%;
+    width: 100%; /* Assicurati che l'elemento non sbordi */
+    box-sizing: border-box; /* Include padding e border nella larghezza totale */
 }
 
 .newspaper-page h3 {
@@ -529,4 +532,3 @@ h2 {
     margin: 0.5rem 0 0;
     color: #666;
 }
-
