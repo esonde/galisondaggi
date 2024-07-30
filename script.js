@@ -777,13 +777,8 @@ function displayIdentikit(data) {
   // Ordina l'array in base al numero di sondaggi (decrescente)
   sortedIdentikit.sort((a, b) => b.pollCount - a.pollCount);
 
-  // Crea due colonne per gli identikit
-  const leftColumn = document.createElement('div');
-  leftColumn.className = 'identikit-column';
-  const rightColumn = document.createElement('div');
-  rightColumn.className = 'identikit-column';
-
-  sortedIdentikit.forEach((item, index) => {
+  // Aggiungi tutte le carte direttamente al contenitore principale
+  sortedIdentikit.forEach((item) => {
     const card = document.createElement('div');
     card.className = 'identikit-card';
     card.innerHTML = `
@@ -791,17 +786,8 @@ function displayIdentikit(data) {
       <p>${item.description}</p>
       <p class="poll-count">Sondaggi: ${item.pollCount}</p>
     `;
-    
-    // Alterna tra colonna sinistra e destra
-    if (index % 2 === 0) {
-      leftColumn.appendChild(card);
-    } else {
-      rightColumn.appendChild(card);
-    }
+    container.appendChild(card);
   });
-
-  container.appendChild(leftColumn);
-  container.appendChild(rightColumn);
 }
 
 // Inizializza la pagina quando il DOM è completamente caricato
