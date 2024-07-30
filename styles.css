@@ -532,3 +532,49 @@ h2 {
     margin: 0.5rem 0 0;
     color: #666;
 }
+
+#identikit-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.identikit-column {
+  width: 100%;
+}
+
+.identikit-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.identikit-card h4 {
+  margin-top: 0;
+  color: #4a90e2;
+}
+
+.identikit-card p {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.identikit-card .poll-count {
+  font-weight: bold;
+  color: #4a90e2;
+}
+
+@media (min-width: 769px) {
+  .identikit-column {
+    width: calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .identikit-column {
+    width: 100%;
+  }
+}

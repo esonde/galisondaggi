@@ -413,27 +413,20 @@ def get_polls(lines, date_format, name_to_phone):
     
     return polls
 
-def load_identikits(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
-
 if __name__ == "__main__":
-    # Load contacts from CSV file
+    # Carica i contatti dal file CSV
     with open("contacts.csv", 'r', encoding="UTF-8") as file:
         csv_reader = csv.DictReader(file)
         contacts = list(csv_reader)
 
-    # Load identikits from JSON file
-    identikits = load_identikits("identikits.json")
-
-    # Create name-to-phone and identikits mappings
+    # Crea il mapping nome-telefono
     name_to_phone = create_name_to_phone_mapping(contacts)
 
     with open("chat.txt", 'r', encoding="UTF-8") as file:
         chat = file.readlines()
 
     date_format = determine_date_format(chat)
-    print(f"Determined date format: {date_format}")
+    print(f"Formato data determinato: {date_format}")
 
     messages = get_messages(chat, date_format, name_to_phone)
     new_polls = get_polls(chat, date_format, name_to_phone)
@@ -446,10 +439,10 @@ if __name__ == "__main__":
     updated_polls, added_polls_count, updated_polls_count = update_polls(existing_polls, new_polls)
     save_to_json(updated_polls, 'polls.json')
 
-    print(f"Existing polls: {len(existing_polls)}")
-    print(f"New polls added: {added_polls_count}")
-    print(f"Polls updated: {updated_polls_count}")
-    print(f"Total polls after update: {len(updated_polls)}")
+    print(f"Sondaggi già presenti: {len(existing_polls)}")
+    print(f"Nuovi sondaggi aggiunti: {added_polls_count}")
+    print(f"Sondaggi aggiornati: {updated_polls_count}")
+    print(f"Totale sondaggi dopo l'aggiornamento: {len(updated_polls)}")
 
     polls = load_polls('polls.json')
     
@@ -461,10 +454,6 @@ if __name__ == "__main__":
     for message in updated_messages:
         message['Author'] = anon_mapping[message['Author']]
     
-    anon_identikits = {}
-    for author, identikit in identikits.items():
-        anon_identikits[anon_mapping[author]] = identikit
-    
     results = analyze_polls(polls, updated_messages)
 
     day_mood_polls, daily_moods, daily_average = analyze_day_mood_polls(polls)
@@ -475,14 +464,11 @@ if __name__ == "__main__":
         'daily_average': daily_average
     }
 
-    # Add identikits section to results
-    results['identikits'] = anon_identikits
-
     save_to_json(results, 'analysis_results.json')
-    print("Analysis complete. Results saved in 'analysis_results.json'")
+    print("Analisi completa. Risultati salvati in 'analysis_results.json'")
 
     unanimous_polls = find_unanimous_polls(polls)
     save_to_json(unanimous_polls, 'unanimous_polls.json')
-    print(f"Found {len(unanimous_polls)} unanimous polls. Saved in 'unanimous_polls.json'")
+    print(f"Trovati {len(unanimous_polls)} sondaggi unanimi. Salvati in 'unanimous_polls.json'")
 
-    print(f"Found {len(day_mood_polls)} daily mood polls with predominantly emoji responses.")
+    print(f"Trovati {len(day_mood_polls)} sondaggi sull'umore giornaliero con risposte prevalentemente emoji.")

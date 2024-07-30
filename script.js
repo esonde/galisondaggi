@@ -8,7 +8,8 @@ function initializePage() {
             createPollsterAnalysisCharts(data);
             createRankings(data);
             createMoodChart(data.day_mood_analysis);
-            createLogScatterChart(data.pollsters_stats); // Attiva la funzione per creare il grafico
+            createLogScatterChart(data.pollsters_stats);
+            displayIdentikit(data); // Aggiungi questa linea
             setupImageZoom();
         })
         .catch(error => console.error('Errore nel caricamento dei dati:', error));
@@ -757,6 +758,51 @@ document.querySelectorAll('nav a').forEach(link => {
         e.target.classList.add('active');
     });
 });
+
+function displayIdentikit(data) {
+  const container = document.getElementById('identikit-container');
+  container.innerHTML = '';
+
+  // Ottieni l'ultimo periodo dai dati dei sondaggisti
+  const lastPeriod = Object.keys(data.pollsters_stats).sort().pop();
+  const lastPeriodStats = data.pollsters_stats[lastPeriod];
+
+  // Crea un array di oggetti con nome, descrizione e numero di sondaggi
+  const sortedIdentikit = Object.entries(data.identikits).map(([name, description]) => ({
+    name,
+    description,
+    pollCount: lastPeriodStats[name]?.cumulative_polls || 0
+  }));
+
+  // Ordina l'array in base al numero di sondaggi (decrescente)
+  sortedIdentikit.sort((a, b) => b.pollCount - a.pollCount);
+
+  // Crea due colonne per gli identikit
+  const leftColumn = document.createElement('div');
+  leftColumn.className = 'identikit-column';
+  const rightColumn = document.createElement('div');
+  rightColumn.className = 'identikit-column';
+
+  sortedIdentikit.forEach((item, index) => {
+    const card = document.createElement('div');
+    card.className = 'identikit-card';
+    card.innerHTML = `
+      <h4>${item.name}</h4>
+      <p>${item.description}</p>
+      <p class="poll-count">Sondaggi: ${item.pollCount}</p>
+    `;
+    
+    // Alterna tra colonna sinistra e destra
+    if (index % 2 === 0) {
+      leftColumn.appendChild(card);
+    } else {
+      rightColumn.appendChild(card);
+    }
+  });
+
+  container.appendChild(leftColumn);
+  container.appendChild(rightColumn);
+}
 
 // Inizializza la pagina quando il DOM è completamente caricato
 document.addEventListener('DOMContentLoaded', initializePage);
