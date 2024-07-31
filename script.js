@@ -780,11 +780,13 @@ function displayIdentikit(data) {
   // Aggiungi tutte le carte direttamente al contenitore principale
   sortedIdentikit.forEach((item) => {
     const card = document.createElement('div');
-    card.className = 'identikit-card';
+    card.className = 'identikit-column'; // Assicurati di utilizzare la classe .identikit-column
     card.innerHTML = `
-      <h4>${item.name}</h4>
-      <p>${item.description}</p>
-      <p class="poll-count">Sondaggi: ${item.pollCount}</p>
+      <div class="identikit-card">
+        <h4>${item.name}</h4>
+        <p>${item.description}</p>
+        <p class="poll-count">Sondaggi: ${item.pollCount}</p>
+      </div>
     `;
     container.appendChild(card);
   });

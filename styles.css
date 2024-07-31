@@ -541,22 +541,9 @@ h2 {
 }
 
 .identikit-column {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-#identikit-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  width: 100%; /* Assicurati che il contenitore occupi il 100% della larghezza disponibile */
-  box-sizing: border-box; /* Include padding e border nella larghezza totale */
-}
-
-.identikit-column {
-  width: 100%;
-  box-sizing: border-box; /* Include padding e border nella larghezza totale */
-  padding: 0.5rem; /* Aggiungi padding per evitare che sbordi */
+  width: calc(50% - 0.5rem);
+  box-sizing: border-box;
+  padding: 0.5rem;
 }
 
 .identikit-card {
@@ -565,7 +552,7 @@ h2 {
   padding: 1rem;
   margin-bottom: 1rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  box-sizing: border-box; /* Include padding e border nella larghezza totale */
+  box-sizing: border-box;
 }
 
 .identikit-card h4 {
@@ -583,14 +570,9 @@ h2 {
   color: #4a90e2;
 }
 
-@media (min-width: 769px) {
-  .identikit-column {
-    width: calc(50% - 1rem); /* Calcolo ridotto per evitare overflow */
-  }
-}
-
 @media (max-width: 768px) {
   .identikit-column {
     width: 100%;
   }
 }
+
