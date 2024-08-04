@@ -326,14 +326,6 @@
         "Unanimous Answer": "No"
     },
     {
-        "Question": "Consideri l'uso di corde vanilla?",
-        "Options": {
-            "Sì": 0,
-            "No": 32
-        },
-        "Unanimous Answer": "No"
-    },
-    {
         "Question": "Miglior posizione per chi riceve",
         "Options": {
             "Missionario": 0,
@@ -1755,7 +1747,7 @@
     {
         "Question": "E la stessa domanda estesa a tutte le persone di quell'età anche non universitari?",
         "Options": {
-            "Vita insieme ad un partner": 22,
+            "Vita insieme ad un partner": 23,
             "Viaggi per l'Europa": 0
         },
         "Unanimous Answer": "Vita insieme ad un partner"
@@ -1769,19 +1761,36 @@
         "Unanimous Answer": "No"
     },
     {
-        "Question": "festival (con un paio di artisti su una decina che ti piacciono)>concerti singoli",
+        "Question": "Durante la cerimonia di inaugurazione delle Olimpiadi si è esibita una band metal francese (metal piuttosto cattivo)",
         "Options": {
-            "📠": 0,
-            "🧢": 8
+            "Figata / gran sintomo di avanzamento culturale verso generi non mainstream / hanno spaccato": 12,
+            "Buu/ cringe/ non mi è piaciuto / meglio qualcosa di più apprezzabile da tutti": 0
         },
-        "Unanimous Answer": "🧢"
+        "Unanimous Answer": "Figata / gran sintomo di avanzamento culturale verso generi non mainstream / hanno spaccato"
     },
     {
-        "Question": "In pieno spirito olimpico, è più uno sport",
+        "Question": ".",
         "Options": {
-            "Break dance": 0,
-            "Cricket": 9
+            "Lidia": 0,
+            "Fraciocchi": 21
         },
-        "Unanimous Answer": "Cricket"
+        "Unanimous Answer": "Fraciocchi"
+    },
+    {
+        "Question": "Sei d'accordo con il principio di autodeterminazione?",
+        "Options": {
+            "Sì": 25,
+            "No": 0
+        },
+        "Unanimous Answer": "Sì"
+    },
+    {
+        "Question": "Hai mai fatto cose sconce in lavanderia al -1?",
+        "Options": {
+            "Sì": 0,
+            "Sì ma soft": 0,
+            "No": 33
+        },
+        "Unanimous Answer": "No"
     }
 ]
